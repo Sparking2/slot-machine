@@ -2,6 +2,16 @@ import { IPointData } from "pixi.js";
 import { pixiApp } from "./pixi";
 import { Transforms } from "./transforms";
 
+export interface AppConfigInterface {
+  frameCheckInterval: number; // ms
+  maxFPS: number; //
+}
+
+export const appConfig: AppConfigInterface = {
+  frameCheckInterval: 100,
+  maxFPS: 60,
+};
+
 export namespace Size {
   export const appWith = 0.9; // in % 0 - 1
   export const appHeight = 0.9; // in % 0 - 1
@@ -28,5 +38,7 @@ export namespace Layout {
 }
 
 export namespace AppSettings {
+  export const maxFPS = 30;
   export const resizeDelay = 200; // ms
+  export const fpsRefreshDelay = 100; // ms
 }

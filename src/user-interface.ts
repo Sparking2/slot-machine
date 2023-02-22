@@ -1,13 +1,19 @@
 import { pixiApp } from "./pixi";
-import { Container, Graphics } from "pixi.js";
-import { AppSettings, Colors, Layout } from "./config";
+import { Container, Graphics, Ticker } from "pixi.js";
+import { AppConfigInterface, AppSettings, Colors, Layout } from "./config";
+import FpsDisplay from "./fps-display";
 
 let isResizing = false;
 
 let mainContainer: Container;
 
-export function init() {
-  redraw();
+let fpsCounter: FpsDisplay;
+
+export function init(config: AppConfigInterface, ticker: Ticker) {
+  // redraw();
+  fpsCounter = new FpsDisplay(config, ticker);
+  console.log(config);
+  pixiApp.stage.addChild(fpsCounter);
 }
 
 export function resize() {
