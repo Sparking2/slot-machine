@@ -1,7 +1,6 @@
 import { Container, Graphics, Sprite, Texture, Ticker } from "pixi.js";
 import { AppConfigInterface } from "../config";
 import { Colors } from "../settings/colors";
-import { Easing, Tween } from "@tweenjs/tween.js";
 
 class Reel extends Container {
   private symbols: Sprite[] = [];
@@ -20,6 +19,10 @@ class Reel extends Container {
       .endFill();
     this.addChild(bg);
 
+    this.height = 100 * 3;
+
+    this.position.set(640, 360);
+
     const colorArray = [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4];
     for (let i = -1; i < 3; i++) {
       const symbol = new Sprite(Texture.WHITE);
@@ -33,95 +36,49 @@ class Reel extends Container {
       this.Ypositions.push(symbol.position.y);
     }
 
-    // for (let i = -1; i < 3; i++) {
-    //   const symbol = new Sprite(Texture.WHITE);
-    //   symbol.tint = colorArray[Math.floor(Math.random() * colorArray.length)];
-    //   symbol.width = symbolSize;
-    //   symbol.height = symbolSize;
-    //   symbol.y = i * symbolSize;
-    //   this.symbols.push(symbol);
-    //   this.addChild(symbol);
-    // }
-
     // DEBUG
     this.interactive = true;
-    // this.addEventListener("pointerdown", () => {
-    //   const animation = () => {
-    //     this.symbols.forEach((item) => {
-    //       item.y += 0.16 * 10;
-    //       if (item.position.y >= symbolSize * 3) item.position.y = -symbolSize;
-    //     });
-    //   };
-    //   ticker.add(animation);
-    //   setTimeout(() => {
-    //     ticker.remove(animation);
-    //     this.checkBounds();
-    //   }, 10000);
-    // });
-
-    let isAnimating = false;
-
-    const tween = new Tween({ y: 0 })
-      .to({ y: 10 }, 16)
-      .repeat(Infinity)
-      .easing(Easing.Linear.None)
-      .onUpdate((value) => {
-        this.symbols.forEach((item) => {
-          item.position.y += value.y;
-        });
-      })
-      .onRepeat(() => {
-        this.symbols.forEach((item) => {
-          if (item.position.y >= 300) item.position.y = -100;
-        });
-      })
-      .onComplete(() => {
-        console.log("finished");
-        this.symbols[0].position.y = -100;
-      })
-      .start();
-
-    const step = (timestamp: number) => {
-      requestAnimationFrame((time) => step(time));
-      tween.update(timestamp);
-    };
-
     this.addEventListener("pointerdown", () => {
-      if (!isAnimating) {
-        const now = performance.now();
-        step(now);
-        isAnimating = true;
-      } else {
-        tween.stop();
-        isAnimating = false;
-      }
+      ticker.add(this.animation);
     });
   }
 
-  checkBounds() {
-    // const length = this.symbols.length - 1;
-    this.symbols.forEach((item, _) => {
-      let boundEnd = item.position.y + item.height;
+  animation = (deltaTime: number) => {
+    this.moveTiles(deltaTime);
+    this.moveLastTileToTop();
+  };
 
-      if (boundEnd > 0 && boundEnd < 100) {
-        item.position.y = 0;
-        return;
-      }
-      if (boundEnd > 100 && boundEnd < 100 * 2) {
-        item.position.y = 100;
-        return;
-      }
-      if (boundEnd > 100 * 2 && boundEnd < 100 * 3) {
-        item.position.y = 200;
-        return;
-      }
-      if (boundEnd > 100 * 3) {
-        // over the limit?
-        item.position.y = -100;
-        // let nextItem = this.symbols[((index % length) + length) % length];
-        // nextItem.position.y = this.Ypositions[1];
-      }
+  private moveTiles(delta: number) {
+    this.symbols.forEach((item) => {
+      item.y += delta * 16;
     });
+  }
+
+  private moveLastTileToTop() {
+    this.symbols.every((item) => {
+      if (!(item.position.y >= 100 * 3)) return true;
+      item.position.y = -100;
+      this.formatTiles(item);
+      return false;
+    });
+  }
+
+  private formatTiles(topTile: Sprite) {
+    const topTileIndex = this.symbols.indexOf(topTile);
+    const length = this.symbols.length;
+    const finalIndex = topTileIndex + length;
+
+    let hasd = 2;
+    for (let i = topTileIndex; i < finalIndex; i++) {
+      let currentItem = this.symbols[((i % length) + length) % length];
+      console.log(currentItem.tint);
+      if (currentItem == topTile) continue;
+
+      if (hasd == 0) currentItem.position.y = 200;
+      else if (hasd == 1) currentItem.position.y = 100;
+      else if (hasd == 2) currentItem.position.y = 0;
+      hasd--;
+    }
   }
 }
 
