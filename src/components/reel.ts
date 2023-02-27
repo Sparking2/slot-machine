@@ -1,17 +1,26 @@
-import { Container, Graphics, Sprite, Texture, Ticker } from "pixi.js";
+import {
+  Container,
+  Graphics,
+  IPointData,
+  Sprite,
+  Texture,
+  Ticker,
+} from "pixi.js";
 import { AppConfigInterface } from "../config";
 import { Colors } from "../settings/colors";
 
 class Reel extends Container {
   private symbols: Sprite[] = [];
-  private Ypositions: number[] = [];
-  // private ticker: Ticker;
+  private ticker: Ticker;
+  private shouldStop: boolean = false;
 
-  // @ts-ignore
-  constructor(config: AppConfigInterface, ticker: Ticker) {
+  constructor(
+    config: AppConfigInterface,
+    ticker: Ticker,
+    position: IPointData
+  ) {
     super();
     const { symbolSize } = config;
-    // this.ticker = ticker;
 
     const bg = new Graphics();
     bg.beginFill(0xffffff)
@@ -21,7 +30,7 @@ class Reel extends Container {
 
     this.height = 100 * 3;
 
-    this.position.set(640, 360);
+    this.position = position;
 
     const colorArray = [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4];
     for (let i = -1; i < 3; i++) {
@@ -33,17 +42,20 @@ class Reel extends Container {
       symbol.y = symbolSize * i;
       this.addChild(symbol);
       this.symbols.push(symbol);
-      this.Ypositions.push(symbol.position.y);
     }
 
-    // DEBUG
-    this.interactive = true;
-    this.addEventListener("pointerdown", () => {
-      ticker.add(this.animation);
-    });
+    this.ticker = ticker;
   }
 
-  animation = (deltaTime: number) => {
+  public spin(): void {
+    this.ticker.add(this.animation);
+  }
+
+  public requestStop(): void {
+    this.shouldStop = true;
+  }
+
+  private animation = (deltaTime: number) => {
     this.moveTiles(deltaTime);
     this.moveLastTileToTop();
   };
@@ -68,16 +80,20 @@ class Reel extends Container {
     const length = this.symbols.length;
     const finalIndex = topTileIndex + length;
 
-    let hasd = 2;
+    let visibleTileIndex = 2;
     for (let i = topTileIndex; i < finalIndex; i++) {
       let currentItem = this.symbols[((i % length) + length) % length];
-      console.log(currentItem.tint);
       if (currentItem == topTile) continue;
 
-      if (hasd == 0) currentItem.position.y = 200;
-      else if (hasd == 1) currentItem.position.y = 100;
-      else if (hasd == 2) currentItem.position.y = 0;
-      hasd--;
+      if (visibleTileIndex == 0) currentItem.position.y = 200;
+      else if (visibleTileIndex == 1) currentItem.position.y = 100;
+      else if (visibleTileIndex == 2) currentItem.position.y = 0;
+      visibleTileIndex--;
+    }
+
+    if (this.shouldStop) {
+      this.ticker.remove(this.animation);
+      this.shouldStop = false;
     }
   }
 }

@@ -1,14 +1,18 @@
 import "./style.css";
 import * as PixiApp from "./components/pixi-app";
-import * as UI from "./user-interface";
 import { appConfig } from "./config";
 import { Ticker } from "pixi.js";
+import GameManager from "./game-manager";
+import UserInterface from "./user-interface";
 
 const config = appConfig;
 const ticker = Ticker.shared;
 ticker.maxFPS = config.maxFPS;
 
+const gameManager = new GameManager(config);
+
 PixiApp.init(config);
-UI.init(config, ticker);
+const ui = new UserInterface(config, ticker, gameManager);
+gameManager.bindUI(ui.reels, ui.playButton);
 
 console.log("Hello there...");

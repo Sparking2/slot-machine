@@ -10,13 +10,19 @@ import {
 } from "pixi.js";
 import { AppConfigInterface } from "../config";
 import { Colors } from "../settings/colors";
+import GameManager from "../game-manager";
 
 class PlayButton extends Container {
   protected background: Sprite;
   protected originalPosition: IPointData;
 
-  constructor(settings: AppConfigInterface) {
+  callback: Function;
+
+  constructor(settings: AppConfigInterface, gameManager: GameManager) {
     super();
+    this.callback = () => {
+      gameManager.startSpin();
+    };
 
     this.originalPosition = settings.playButtonPosition;
 
@@ -45,6 +51,7 @@ class PlayButton extends Container {
   }
 
   private handleClick(_: FederatedPointerEvent) {
+    this.callback();
     this.setDisabled();
   }
 

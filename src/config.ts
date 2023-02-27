@@ -11,9 +11,18 @@ export interface AppConfigInterface {
   fpsLabelPosition: IPointData;
   playButtonPosition: IPointData;
   symbolSize: number;
+  gameTime: number;
+  slotPositions: IPointData[];
 }
 
 export const appConfig: AppConfigInterface = {
+  slotPositions: [
+    { x: 310, y: 360 },
+    { x: 420, y: 360 },
+    { x: 530, y: 360 },
+    { x: 640, y: 360 },
+    { x: 750, y: 360 },
+  ],
   fpsLabelPosition: { x: 100, y: 2 },
   playButtonPosition: { x: 1000, y: 500 },
   viewWidth: 1280,
@@ -21,4 +30,5 @@ export const appConfig: AppConfigInterface = {
   frameCheckInterval: 100,
   maxFPS: 60,
   symbolSize: 100,
+  gameTime: 3500, // ms
 };
