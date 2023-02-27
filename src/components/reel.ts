@@ -7,17 +7,18 @@ import {
   Ticker,
 } from "pixi.js";
 import { AppConfigInterface } from "../config";
-import { Colors } from "../settings/colors";
+import Tile from "./tile";
 
 class Reel extends Container {
-  private symbols: Sprite[] = [];
+  private tiles: Sprite[] = [];
   private ticker: Ticker;
   private shouldStop: boolean = false;
 
   constructor(
     config: AppConfigInterface,
     ticker: Ticker,
-    position: IPointData
+    position: IPointData,
+    slots: number[]
   ) {
     super();
     const { symbolSize } = config;
@@ -32,16 +33,11 @@ class Reel extends Container {
 
     this.position = position;
 
-    const colorArray = [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4];
+    // const colorArray = [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4];
     for (let i = -1; i < 3; i++) {
-      const symbol = new Sprite(Texture.WHITE);
-      // symbol.tint = colorArray[Math.floor(Math.random() * colorArray.length)];
-      symbol.tint = colorArray[i + 1];
-      symbol.width = symbolSize;
-      symbol.height = symbolSize;
-      symbol.y = symbolSize * i;
-      this.addChild(symbol);
-      this.symbols.push(symbol);
+      const tile = new Tile(symbolSize, slots[i + 1], Texture.WHITE);
+      this.addChild(tile);
+      this.tiles.push(tile);
     }
 
     this.ticker = ticker;
@@ -61,13 +57,13 @@ class Reel extends Container {
   };
 
   private moveTiles(delta: number) {
-    this.symbols.forEach((item) => {
+    this.tiles.forEach((item) => {
       item.y += delta * 16;
     });
   }
 
   private moveLastTileToTop() {
-    this.symbols.every((item) => {
+    this.tiles.every((item) => {
       if (!(item.position.y >= 100 * 3)) return true;
       item.position.y = -100;
       this.formatTiles(item);
@@ -76,13 +72,13 @@ class Reel extends Container {
   }
 
   private formatTiles(topTile: Sprite) {
-    const topTileIndex = this.symbols.indexOf(topTile);
-    const length = this.symbols.length;
+    const topTileIndex = this.tiles.indexOf(topTile);
+    const length = this.tiles.length;
     const finalIndex = topTileIndex + length;
 
     let visibleTileIndex = 2;
     for (let i = topTileIndex; i < finalIndex; i++) {
-      let currentItem = this.symbols[((i % length) + length) % length];
+      let currentItem = this.tiles[((i % length) + length) % length];
       if (currentItem == topTile) continue;
 
       if (visibleTileIndex == 0) currentItem.position.y = 200;

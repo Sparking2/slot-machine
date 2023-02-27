@@ -1,4 +1,5 @@
 import { IPointData } from "pixi.js";
+import { Colors } from "./settings/colors";
 
 export interface AppConfigInterface {
   // in ms
@@ -13,6 +14,7 @@ export interface AppConfigInterface {
   symbolSize: number;
   gameTime: number;
   slotPositions: IPointData[];
+  slotTiles: number[][];
 }
 
 export const appConfig: AppConfigInterface = {
@@ -22,6 +24,13 @@ export const appConfig: AppConfigInterface = {
     { x: 530, y: 360 },
     { x: 640, y: 360 },
     { x: 750, y: 360 },
+  ],
+  slotTiles: [
+    [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4],
+    [Colors.slot4, Colors.slot1, Colors.slot2, Colors.slot3],
+    [Colors.slot3, Colors.slot4, Colors.slot1, Colors.slot2],
+    [Colors.slot2, Colors.slot3, Colors.slot4, Colors.slot1],
+    [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4],
   ],
   fpsLabelPosition: { x: 100, y: 2 },
   playButtonPosition: { x: 1000, y: 500 },
