@@ -7,6 +7,7 @@ class Reel extends Container {
   private tiles: Tile[] = [];
   private ticker: Ticker;
   private shouldStop: boolean = false;
+  private isInEnding;
   private endingTween: Tween<any>;
 
   constructor(
@@ -25,7 +26,6 @@ class Reel extends Container {
     this.addChild(bg);
 
     this.height = 100 * 3;
-
     this.position = position;
 
     for (let i = -1; i < 3; i++) {
@@ -35,49 +35,56 @@ class Reel extends Container {
       this.tiles.push(tile);
     }
 
+    this.isInEnding = false;
     this.ticker = ticker;
 
     this.endingTween = new Tween({ y: 0 })
       .to({ y: 100 }, 1000)
       .easing(Easing.Elastic.Out)
-      .onStart(() => {
-        this.tiles.forEach((tile) => {
-          tile.lastVerticalPosition = tile.position.y;
-        });
-      })
-      .onUpdate((tweenValue) => {
-        this.tiles.forEach((tile) => {
-          tile.position.y = tile.lastVerticalPosition + tweenValue.y;
-        });
-      })
-      .onComplete(() => {
-        this.tiles.forEach((tile) => {
-          tile.lastVerticalPosition = 0;
-        });
-      });
+      .onStart(this.handleTweenStart)
+      .onUpdate(this.handleTweenUpdate)
+      .onComplete(this.handleTweenCompleted);
   }
 
-  public spin(): void {
-    this.ticker.add(this.animation);
+  handleTweenStart() {
+    this.tiles.forEach((tile) => {
+      tile.position.y -= 100;
+      tile.lastVerticalPosition = tile.position.y;
+    });
   }
 
-  public requestStop(): void {
-    this.shouldStop = true;
+  handleTweenUpdate(tweenValue: { y: number }) {
+    this.tiles.forEach((tile) => {
+      tile.position.y = tile.lastVerticalPosition + tweenValue.y;
+    });
   }
+
+  handleTweenCompleted() {
+    this.tiles.forEach((tile) => {
+      tile.lastVerticalPosition = 0;
+    });
+    this.isInEnding = false;
+  }
+
+  public spin = () => this.ticker.add(this.animation);
+
+  public requestStop = () => (this.shouldStop = true);
 
   private tweenStart(timestamp: number) {
     this.endingTween.start(timestamp);
+    this.isInEnding = true;
   }
 
   private tweenStep(timestamp: number) {
+    if (!this.isInEnding) return;
     requestAnimationFrame((time) => this.tweenStep(time));
     this.endingTween.update(timestamp);
   }
 
-  private animation = (deltaTime: number) => {
+  private animation(deltaTime: number) {
     this.moveTiles(deltaTime);
     this.moveLastTileToTop();
-  };
+  }
 
   private moveTiles(delta: number) {
     this.tiles.forEach((item) => {
