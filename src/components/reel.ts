@@ -1,18 +1,13 @@
-import {
-  Container,
-  Graphics,
-  IPointData,
-  Sprite,
-  Texture,
-  Ticker,
-} from "pixi.js";
+import { Container, Graphics, IPointData, Texture, Ticker } from "pixi.js";
 import { AppConfigInterface } from "../config";
 import Tile from "./tile";
+import { Easing, Tween } from "@tweenjs/tween.js";
 
 class Reel extends Container {
-  private tiles: Sprite[] = [];
+  private tiles: Tile[] = [];
   private ticker: Ticker;
   private shouldStop: boolean = false;
+  private endingTween: Tween<any>;
 
   constructor(
     config: AppConfigInterface,
@@ -33,14 +28,33 @@ class Reel extends Container {
 
     this.position = position;
 
-    // const colorArray = [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4];
     for (let i = -1; i < 3; i++) {
       const tile = new Tile(symbolSize, slots[i + 1], Texture.WHITE);
+      tile.position = { x: 0, y: symbolSize * i };
       this.addChild(tile);
       this.tiles.push(tile);
     }
 
     this.ticker = ticker;
+
+    this.endingTween = new Tween({ y: 0 })
+      .to({ y: 100 }, 1000)
+      .easing(Easing.Elastic.Out)
+      .onStart(() => {
+        this.tiles.forEach((tile) => {
+          tile.lastVerticalPosition = tile.position.y;
+        });
+      })
+      .onUpdate((tweenValue) => {
+        this.tiles.forEach((tile) => {
+          tile.position.y = tile.lastVerticalPosition + tweenValue.y;
+        });
+      })
+      .onComplete(() => {
+        this.tiles.forEach((tile) => {
+          tile.lastVerticalPosition = 0;
+        });
+      });
   }
 
   public spin(): void {
@@ -49,6 +63,15 @@ class Reel extends Container {
 
   public requestStop(): void {
     this.shouldStop = true;
+  }
+
+  private tweenStart(timestamp: number) {
+    this.endingTween.start(timestamp);
+  }
+
+  private tweenStep(timestamp: number) {
+    requestAnimationFrame((time) => this.tweenStep(time));
+    this.endingTween.update(timestamp);
   }
 
   private animation = (deltaTime: number) => {
@@ -71,7 +94,7 @@ class Reel extends Container {
     });
   }
 
-  private formatTiles(topTile: Sprite) {
+  private formatTiles(topTile: Tile) {
     const topTileIndex = this.tiles.indexOf(topTile);
     const length = this.tiles.length;
     const finalIndex = topTileIndex + length;
@@ -90,6 +113,10 @@ class Reel extends Container {
     if (this.shouldStop) {
       this.ticker.remove(this.animation);
       this.shouldStop = false;
+
+      const now = performance.now();
+      this.tweenStart(now);
+      this.tweenStep(now);
     }
   }
 }

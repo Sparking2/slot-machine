@@ -24,18 +24,19 @@ class UserInterface {
     gameManager: GameManager
   ) {
     const container = new Container();
-    // this.mainContainer = new Container();
     const fps = new FpsDisplay(config, ticker);
     container.addChild(fps);
 
     const playBtn = new PlayButton(config, gameManager);
     container.addChild(playBtn);
 
-    config.slotPositions.forEach((position, index) => {
-      const reel = new Reel(config, ticker, position, config.slotTiles[index]);
+    for (let i = 0; i < config.slotCount; i++) {
+      const position = config.slotPositions[i];
+      const tiles = config.slotTiles[i];
+      const reel = new Reel(config, ticker, position, tiles);
       container.addChild(reel);
       this._reels.push(reel);
-    });
+    }
 
     this.fpsCounter = fps;
     this.mainContainer = container;

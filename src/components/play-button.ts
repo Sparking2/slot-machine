@@ -78,12 +78,6 @@ class PlayButton extends Container {
     this.removeEventListener("pointerenter", this.handlePointerEnter);
     this.removeEventListener("pointerout", this.handlePointerExit);
   }
-
-  public resize(width: number, height: number): void {
-    const newX = (width / 1280) * this.originalPosition.x;
-    const newY = (height / 720) * this.originalPosition.y;
-    this.position = { x: newX, y: newY };
-  }
 }
 
 export default PlayButton;

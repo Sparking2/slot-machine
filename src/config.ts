@@ -13,11 +13,13 @@ export interface AppConfigInterface {
   playButtonPosition: IPointData;
   symbolSize: number;
   gameTime: number;
+  slotCount: number;
   slotPositions: IPointData[];
   slotTiles: number[][];
 }
 
 export const appConfig: AppConfigInterface = {
+  slotCount: 1,
   slotPositions: [
     { x: 310, y: 360 },
     { x: 420, y: 360 },
