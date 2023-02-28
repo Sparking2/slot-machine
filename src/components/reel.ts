@@ -46,62 +46,62 @@ class Reel extends Container {
       .onComplete(this.handleTweenCompleted);
   }
 
-  handleTweenStart() {
+  private handleTweenStart = () => {
     this.tiles.forEach((tile) => {
       tile.position.y -= 100;
       tile.lastVerticalPosition = tile.position.y;
     });
-  }
+  };
 
-  handleTweenUpdate(tweenValue: { y: number }) {
+  private handleTweenUpdate = (tweenValue: { y: number }) => {
     this.tiles.forEach((tile) => {
       tile.position.y = tile.lastVerticalPosition + tweenValue.y;
     });
-  }
+  };
 
-  handleTweenCompleted() {
+  private handleTweenCompleted = () => {
     this.tiles.forEach((tile) => {
       tile.lastVerticalPosition = 0;
     });
     this.isInEnding = false;
-  }
+  };
 
   public spin = () => this.ticker.add(this.animation);
 
   public requestStop = () => (this.shouldStop = true);
 
-  private tweenStart(timestamp: number) {
+  private tweenStart = (timestamp: number) => {
     this.endingTween.start(timestamp);
     this.isInEnding = true;
-  }
+  };
 
-  private tweenStep(timestamp: number) {
+  private tweenStep = (timestamp: number) => {
     if (!this.isInEnding) return;
     requestAnimationFrame((time) => this.tweenStep(time));
     this.endingTween.update(timestamp);
-  }
+  };
 
-  private animation(deltaTime: number) {
+  private animation = (deltaTime: number) => {
     this.moveTiles(deltaTime);
     this.moveLastTileToTop();
-  }
+  };
 
-  private moveTiles(delta: number) {
+  private moveTiles = (delta: number) => {
     this.tiles.forEach((item) => {
       item.y += delta * 16;
     });
-  }
+  };
 
-  private moveLastTileToTop() {
+  private moveLastTileToTop = () => {
     this.tiles.every((item) => {
       if (!(item.position.y >= 100 * 3)) return true;
       item.position.y = -100;
       this.formatTiles(item);
       return false;
     });
-  }
+  };
 
-  private formatTiles(topTile: Tile) {
+  private formatTiles = (topTile: Tile) => {
     const topTileIndex = this.tiles.indexOf(topTile);
     const length = this.tiles.length;
     const finalIndex = topTileIndex + length;
@@ -125,7 +125,7 @@ class Reel extends Container {
       this.tweenStart(now);
       this.tweenStep(now);
     }
-  }
+  };
 }
 
 export default Reel;
