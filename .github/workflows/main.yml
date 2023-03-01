@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   setup_environment:
-    name: Setup Node.js environment
+    name: Build Web App
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
