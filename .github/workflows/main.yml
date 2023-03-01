@@ -22,4 +22,5 @@ jobs:
       with:
         name: ${{ github.event.repository.name }}-build
         path: dist/
-  
+        retention-days: 1
+    - run: ls dist/
