@@ -18,10 +18,11 @@ jobs:
     - run: pnpm install --frozen-lockfile
     - run: pnpm run build
     - run: ls
-    - run: ls /dist
+    - run: ls dist
+    - run: ls -r
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ github.head_ref }}.${{ github.sha }}
-        path: /dist
+        path: dist/
   
