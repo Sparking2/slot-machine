@@ -3,10 +3,7 @@ on:
     branches:
     - main
 jobs:
-  prepare_environment:
-    name: deploy to staging
-    runs-on: ubuntu-latest
-  setup_node:
+  setup_environment:
     name: Setup Node.js environment
     runs-on: ubuntu-latest
     steps:
