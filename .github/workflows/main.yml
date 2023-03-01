@@ -35,5 +35,5 @@ jobs:
     - run: aws configure set aws_access_key_id qwerty --profile ${{ vars.PROFILE }}
     - run: aws configure set aws_secret_access_key qwerty --profile ${{ vars.PROFILE }}
     - run: aws configure set region ${{ vars.REGION }} --profile ${{ vars.PROFILE }}
-    - run: aws configure list
+    - run: aws configure list-profiles
       
