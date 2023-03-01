@@ -23,15 +23,13 @@ jobs:
         name: ${{ github.event.repository.name }}-build
         path: dist/
         retention-days: 1
+    - run: cd ~
     - name: Download
       uses: actions/download-artifact@v3
       with:
         path: artifact/
-    - name: Upload to S3
-      uses: shallwefootball/s3-upload-action@master
-      with:
-        aws_key_id: ${{ secrets.AWS_KEY_ID }}
-        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: 'artifact'
+    - run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    - run: unzip awscliv2.zip
+    - run: sudo ./aws/install
+    - run: aws --version
       
