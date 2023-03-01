@@ -28,4 +28,4 @@ jobs:
       with:
         path: artifact/
     - run: ls
-    - run: ls artifact
+    - run: ls artifact -r
