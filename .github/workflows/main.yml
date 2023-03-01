@@ -33,7 +33,7 @@ jobs:
     - run: sudo ./aws/install --update
     - run: aws --version
     - run: aws configure set aws_access_key_id ${{ secrets.AWS_KEY_ID }} --profile ${{ vars.PROFILE }}
-    - run: aws configure set aws_secret_access_key ${{ AWS_SECRET_ACCESS_KEY }} --profile ${{ vars.PROFILE }}
+    - run: aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile ${{ vars.PROFILE }}
     - run: aws configure set region ${{ vars.REGION }} --profile ${{ vars.PROFILE }}
     - run: aws s3api put-object --bucket ${{ vars.AWS_BUCKET }} --key test --body artifact/${{ github.event.repository.name }}-build --profile ${{ vars.PROFILE }}
       
