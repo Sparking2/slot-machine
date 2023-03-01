@@ -16,6 +16,7 @@ jobs:
         node-version: 18
     - run: npm install -g pnpm
     - run: pnpm install --frozen-lockfile
+    - run: vite build
     - run: ls
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
