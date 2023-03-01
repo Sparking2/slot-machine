@@ -4,7 +4,7 @@ on:
     - main
   workflow_dispatch:
 jobs:
-  setup_environment:
+  Build:
     name: Build Web App
     runs-on: ubuntu-latest
     steps:
@@ -23,4 +23,11 @@ jobs:
         name: ${{ github.event.repository.name }}-build
         path: dist/
         retention-days: 1
-    - run: ls dist/
+  Download:
+    name: download
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v3
+      with: 
+        name: my-artifact
+    - run: ls
