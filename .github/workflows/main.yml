@@ -16,4 +16,10 @@ jobs:
         node-version: 18
     - run: npm install -g pnpm
     - run: pnpm install --frozen-lockfile
+    - run: ls
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ github.head_ref }}.${{ github.sha }}
+        path: /dist/
   
