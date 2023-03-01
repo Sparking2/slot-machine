@@ -1,0 +1,19 @@
+on: 
+  push:
+    branches:
+    - main
+jobs:
+  prepare_environment:
+    name: deploy to staging
+    runs-on: ubuntu-latest
+  setup_node:
+    name: Setup Node.js environment
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@3
+    - uses: actions/setup-node@3
+      with:
+        node-version: 18
+    - run: npm install -g pnpm
+    - run: pnpm install --frozen-lockfile
+  
