@@ -37,5 +37,5 @@ jobs:
     - run: aws configure set region ${{ vars.REGION }} --profile ${{ vars.PROFILE }}
     - run: ls
     - run: ls artifact/
-    - run: aws s3api put-object --bucket ${{ vars.AWS_BUCKET }} --key test --body /artifact/${{ github.event.repository.name }}-build.zip --profile ${{ vars.PROFILE }}
+    - run: aws s3api put-object --bucket ${{ vars.AWS_BUCKET }} --key test --body "/artifact/${{ github.event.repository.name }}-build" --profile ${{ vars.PROFILE }}
       
