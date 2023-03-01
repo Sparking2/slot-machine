@@ -24,9 +24,10 @@ jobs:
         path: dist/
         retention-days: 1
   Download:
-    name: download
+    name: Download
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with: 
         name: my-artifact
