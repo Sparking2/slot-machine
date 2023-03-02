@@ -17,13 +17,12 @@ jobs:
     - run: npm install -g pnpm
     - run: pnpm install --frozen-lockfile
     - run: pnpm run build
+    - run: zip -r ${{ github.event.repository.name }}-build.zip dist
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ github.event.repository.name }}-build
-        path: dist/
+        path: ${{ github.event.repository.name }}--build.zip
         retention-days: 1
-    - run: cd ~
     - name: Download
       uses: actions/download-artifact@v3
       with:
