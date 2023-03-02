@@ -17,16 +17,16 @@ jobs:
     - run: npm install -g pnpm
     - run: pnpm install --frozen-lockfile
     - run: pnpm run build
-    - run: zip -r ${{ github.event.repository.name }}-build.zip dist
+    - run: zip -r artifact/${{ github.event.repository.name }}-build.zip dist
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        path: ${{ github.event.repository.name }}--build.zip
+        path: artifact/
         retention-days: 1
-    - name: Download
-      uses: actions/download-artifact@v3
-      with:
-        name: "${{ github.event.repository.name }}-build"
+    #- name: Download
+    #  uses: actions/download-artifact@v3
+    #  with:
+    #    name: "${{ github.event.repository.name }}-build"
     - run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     - run: unzip awscliv2.zip
     - run: sudo ./aws/install --update
