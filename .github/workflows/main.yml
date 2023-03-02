@@ -20,7 +20,7 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ github.event.repository.name }}-build
+        name: ${{ github.event.repository.name }}-build.zip
         path: dist/
         retention-days: 1
     - run: cd ~
