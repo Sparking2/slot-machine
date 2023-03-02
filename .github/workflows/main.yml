@@ -26,8 +26,6 @@ jobs:
     - run: cd ~
     - name: Download
       uses: actions/download-artifact@v3
-      with:
-        path: artifact/
     - run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     - run: unzip awscliv2.zip
     - run: sudo ./aws/install --update
@@ -37,5 +35,5 @@ jobs:
     - run: aws configure set region ${{ vars.REGION }} --profile ${{ vars.PROFILE }}
     - run: ls
     - run: ls artifact/
-    - run: aws s3api put-object --bucket ${{ vars.AWS_BUCKET }} --key test --body "/artifact/${{ github.event.repository.name }}-build" --profile ${{ vars.PROFILE }}
+    - run: aws s3api put-object --bucket ${{ vars.AWS_BUCKET }} --key test --body ${{ github.event.repository.name }}-build --profile ${{ vars.PROFILE }}
       
