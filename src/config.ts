@@ -15,7 +15,7 @@ export interface AppConfigInterface {
   gameTime: number;
   slotCount: number;
   slotPadding: number;
-  slotPositions: IPointData[];
+  slotSpeed: number;
   slotTiles: number[][];
 }
 
@@ -23,13 +23,7 @@ export const appConfig: AppConfigInterface = {
   slotCount: 5,
   slotPadding: 10,
   slotTileSize: 100,
-  slotPositions: [
-    { x: 0, y: 0 },
-    { x: 120, y: 0 },
-    { x: 240, y: 0 },
-    { x: 360, y: 0 },
-    { x: 480, y: 0 },
-  ],
+  slotSpeed: 35,
   slotTiles: [
     [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4],
     [Colors.slot4, Colors.slot1, Colors.slot2, Colors.slot3],

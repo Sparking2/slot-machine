@@ -5,6 +5,7 @@ import FpsDisplay from "./components/fps-display";
 import PlayButton from "./components/play-button";
 import Reel from "./components/reel";
 import GameManager from "./game-manager";
+import { MotionBlurFilter } from "pixi-filters";
 
 class UserInterface {
   mainContainer: Container;
@@ -34,7 +35,6 @@ class UserInterface {
     for (let i = 0; i < config.slotCount; i++) {
       const x = (config.slotPadding + config.slotTileSize) * i;
       const position = { x: x, y: 0 };
-      // const position = config.slotPositions[i];
       const tiles = config.slotTiles[i];
       const reel = new Reel(config, ticker, position, tiles);
       slotsContainer.addChild(reel);
@@ -67,6 +67,12 @@ class UserInterface {
     pixiApp.stage.addChild(containerMask);
 
     slotsContainer.mask = containerMask;
+
+    const motion = new MotionBlurFilter();
+    motion.velocity.set(40, 40);
+    motion.kernelSize = 25;
+    motion.enabled = true;
+    containerMask.filters = [motion];
   }
 }
 

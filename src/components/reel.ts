@@ -5,6 +5,7 @@ import { Easing, Tween } from "@tweenjs/tween.js";
 
 class Reel extends Container {
   private tiles: Tile[] = [];
+  private spinSpeed: number;
   private ticker: Ticker;
   private shouldStop: boolean = false;
   private isInEnding;
@@ -18,6 +19,7 @@ class Reel extends Container {
   ) {
     super();
     const { slotTileSize } = config;
+    this.spinSpeed = config.slotSpeed;
 
     const bg = new Graphics();
     bg.beginFill(0xffffff)
@@ -25,7 +27,7 @@ class Reel extends Container {
       .endFill();
     this.addChild(bg);
 
-    this.height = 100 * 3;
+    this.height = slotTileSize * 3;
     this.position = position;
 
     for (let i = -1; i < 3; i++) {
@@ -39,7 +41,7 @@ class Reel extends Container {
     this.ticker = ticker;
 
     this.endingTween = new Tween({ y: 0 })
-      .to({ y: 100 }, 1000)
+      .to({ y: slotTileSize }, 1000)
       .easing(Easing.Elastic.Out)
       .onStart(this.handleTweenStart)
       .onUpdate(this.handleTweenUpdate)
@@ -88,7 +90,7 @@ class Reel extends Container {
 
   private moveTiles = (delta: number) => {
     this.tiles.forEach((item) => {
-      item.y += delta * 16;
+      item.y += delta * this.spinSpeed;
     });
   };
 
