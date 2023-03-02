@@ -2,7 +2,7 @@ name: Repo Build To Amplify
 on: 
   push:
     branches:
-    - main
+    - master
   workflow_dispatch:
   
 env:
@@ -38,5 +38,5 @@ jobs:
     - run: aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile ${{ vars.PROFILE }}
     - run: aws configure set region ${{ vars.REGION }} --profile ${{ vars.PROFILE }}
     - run: aws s3api put-object --bucket ${{ vars.AWS_BUCKET }} --key $FILE_NAME --body ./artifact/$FILE_NAME --acl public-read --profile ${{ vars.PROFILE }}
-    - run: aws amplify start-deployment --app-id $APP_ID --branch-name production --source-url https://${{ vars.AWS_BUCKET}}.s3.amazonaws.com/$FILE_NAME
+    - run: aws amplify start-deployment --app-id $APP_ID --branch-name production --source-url https://${{ vars.AWS_BUCKET}}.s3.amazonaws.com/$FILE_NAME --profile ${{ vars.PROFILE }}
       
