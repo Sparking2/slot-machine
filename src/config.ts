@@ -19,7 +19,7 @@ export interface AppConfigInterface {
 }
 
 export const appConfig: AppConfigInterface = {
-  slotCount: 2,
+  slotCount: 5,
   slotPositions: [
     { x: 310, y: 360 },
     { x: 420, y: 360 },
