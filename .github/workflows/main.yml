@@ -18,17 +18,12 @@ jobs:
     - run: pnpm install --frozen-lockfile
     - run: pnpm run build
     - run: mkdir artifact
-    - run: cd dist; zip -r ../artifact/${{ github.event.repository.nam }}-build.zip ./*; cd ..;
-#     - run: zip -r artifact/${{ github.event.repository.name }}-build.zip dist/*
+    - run: cd dist; zip -r ../artifact/${{ github.event.repository.name }}-build.zip ./*; cd ..;
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
         path: artifact/
         retention-days: 1
-    #- name: Download
-    #  uses: actions/download-artifact@v3
-    #  with:
-    #    name: "${{ github.event.repository.name }}-build"
     - run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     - run: unzip awscliv2.zip
     - run: sudo ./aws/install --update
@@ -36,6 +31,5 @@ jobs:
     - run: aws configure set aws_access_key_id ${{ secrets.AWS_KEY_ID }} --profile ${{ vars.PROFILE }}
     - run: aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile ${{ vars.PROFILE }}
     - run: aws configure set region ${{ vars.REGION }} --profile ${{ vars.PROFILE }}
-    - run: ls
-    #- run: aws s3api put-object --bucket ${{ vars.AWS_BUCKET }} --key test --body ${{ github.event.repository.name }}-build.zip --profile ${{ vars.PROFILE }}
+    - run: aws s3api put-object --bucket ${{ vars.AWS_BUCKET }} --key test --body ./artifact/${{ github.event.repository.name }}-build.zip --profile ${{ vars.PROFILE }}
       
