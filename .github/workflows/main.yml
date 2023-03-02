@@ -20,14 +20,14 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ github.event.repository.name }}-build.zip
+        name: ${{ github.event.repository.name }}-build
         path: dist/
         retention-days: 1
     - run: cd ~
     - name: Download
       uses: actions/download-artifact@v3
       with:
-        name: "${{ github.event.repository.name }}-build.zip"
+        name: "${{ github.event.repository.name }}-build"
     - run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     - run: unzip awscliv2.zip
     - run: sudo ./aws/install --update
