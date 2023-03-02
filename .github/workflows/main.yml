@@ -17,6 +17,7 @@ jobs:
     - run: npm install -g pnpm
     - run: pnpm install --frozen-lockfile
     - run: pnpm run build
+    - run: mkdir artifact
     - run: zip -r artifact/${{ github.event.repository.name }}-build.zip dist
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
