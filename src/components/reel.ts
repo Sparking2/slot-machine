@@ -17,11 +17,11 @@ class Reel extends Container {
     slots: number[]
   ) {
     super();
-    const { symbolSize } = config;
+    const { slotTileSize } = config;
 
     const bg = new Graphics();
     bg.beginFill(0xffffff)
-      .drawRect(0, 0, symbolSize, symbolSize * 3)
+      .drawRect(0, 0, slotTileSize, slotTileSize * 3)
       .endFill();
     this.addChild(bg);
 
@@ -29,8 +29,8 @@ class Reel extends Container {
     this.position = position;
 
     for (let i = -1; i < 3; i++) {
-      const tile = new Tile(symbolSize, slots[i + 1], Texture.WHITE);
-      tile.position = { x: 0, y: symbolSize * i };
+      const tile = new Tile(slotTileSize, slots[i + 1], Texture.WHITE);
+      tile.position = { x: 0, y: slotTileSize * i };
       this.addChild(tile);
       this.tiles.push(tile);
     }

@@ -11,21 +11,24 @@ export interface AppConfigInterface {
   viewHeight: number;
   fpsLabelPosition: IPointData;
   playButtonPosition: IPointData;
-  symbolSize: number;
+  slotTileSize: number;
   gameTime: number;
   slotCount: number;
+  slotPadding: number;
   slotPositions: IPointData[];
   slotTiles: number[][];
 }
 
 export const appConfig: AppConfigInterface = {
   slotCount: 5,
+  slotPadding: 10,
+  slotTileSize: 100,
   slotPositions: [
-    { x: 310, y: 360 },
-    { x: 420, y: 360 },
-    { x: 530, y: 360 },
-    { x: 640, y: 360 },
-    { x: 750, y: 360 },
+    { x: 0, y: 0 },
+    { x: 120, y: 0 },
+    { x: 240, y: 0 },
+    { x: 360, y: 0 },
+    { x: 480, y: 0 },
   ],
   slotTiles: [
     [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4],
@@ -40,6 +43,5 @@ export const appConfig: AppConfigInterface = {
   viewHeight: 720,
   frameCheckInterval: 100,
   maxFPS: 60,
-  symbolSize: 100,
   gameTime: 3500, // ms
 };
