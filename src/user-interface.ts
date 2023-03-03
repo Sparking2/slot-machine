@@ -1,5 +1,5 @@
 import { pixiApp } from "./components/pixi-app";
-import { Container, Graphics, Ticker } from "pixi.js";
+import { Assets, Container, Graphics, Ticker } from "pixi.js";
 import { AppConfigInterface } from "./config";
 import FpsDisplay from "./components/fps-display";
 import PlayButton from "./components/play-button";
@@ -19,6 +19,11 @@ class UserInterface {
     return this._reels;
   }
 
+  private readonly _filter: MotionBlurFilter;
+  get filter(): MotionBlurFilter {
+    return this._filter;
+  }
+
   constructor(
     config: AppConfigInterface,
     ticker: Ticker,
@@ -32,18 +37,25 @@ class UserInterface {
     mainContainer.addChild(playBtn);
 
     const slotsContainer = new Container();
-    for (let i = 0; i < config.slotCount; i++) {
-      const x = (config.slotPadding + config.slotTileSize) * i;
-      const position = { x: x, y: 0 };
-      const tiles = config.slotTiles[i];
-      const reel = new Reel(config, ticker, position, tiles);
-      slotsContainer.addChild(reel);
-      this._reels.push(reel);
-    }
-    const slotContainerHeight = slotsContainer.height - config.slotTileSize;
-    slotsContainer.pivot.set(slotsContainer.width / 2, slotContainerHeight / 2);
-    slotsContainer.position.set(640, 360);
-    mainContainer.addChild(slotsContainer);
+
+    loadTexture(config.slotTexturePath).then((result) => {
+      for (let i = 0; i < config.slotCount; i++) {
+        const x = (config.slotPadding + config.slotTileSize) * i;
+        const position = { x: x, y: 0 };
+        const tiles = config.slotTiles[i];
+        const reel = new Reel(config, ticker, position, tiles, result);
+        slotsContainer.addChild(reel);
+        this._reels.push(reel);
+      }
+
+      const slotContainerHeight = slotsContainer.height - config.slotTileSize;
+      slotsContainer.pivot.set(
+        slotsContainer.width / 2,
+        slotContainerHeight / 2
+      );
+      slotsContainer.position.set(640, 360);
+      mainContainer.addChild(slotsContainer);
+    });
 
     this.fpsCounter = fps;
     this.mainContainer = mainContainer;
@@ -52,28 +64,27 @@ class UserInterface {
     pixiApp.stage.addChild(this.mainContainer);
 
     const containerMask = new Graphics();
-
     const maskWidth =
       (config.slotPadding + config.slotTileSize) * config.slotCount;
     const maskHeight = config.slotTileSize * 3;
-
     containerMask
       .beginFill(0x660000)
       .drawRect(0, 0, maskWidth, maskHeight)
       .endFill();
     containerMask.pivot.set(containerMask.width / 2, containerMask.height / 2);
     containerMask.position.set(640, 360);
-
     pixiApp.stage.addChild(containerMask);
-
     slotsContainer.mask = containerMask;
 
-    const motion = new MotionBlurFilter();
-    motion.velocity.set(40, 40);
-    motion.kernelSize = 25;
-    motion.enabled = true;
-    containerMask.filters = [motion];
+    this._filter = new MotionBlurFilter([0, 0], 25);
+    this._filter.enabled = true;
+    containerMask.filters = [this._filter];
   }
+}
+
+async function loadTexture(url: string) {
+  const loadedTexture = await Assets.load(url);
+  return loadedTexture["textures"];
 }
 
 export default UserInterface;

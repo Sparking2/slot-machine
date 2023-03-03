@@ -2,10 +2,13 @@ import { Container, Graphics, IPointData, Texture, Ticker } from "pixi.js";
 import { AppConfigInterface } from "../config";
 import Tile from "./tile";
 import { Easing, Tween } from "@tweenjs/tween.js";
+import { Colors } from "../settings/colors";
+import TileSlotType = Colors.TileSlotType;
 
 class Reel extends Container {
   private tiles: Tile[] = [];
-  private spinSpeed: number;
+  private readonly spinSpeed: number;
+  private slotTileSize: number;
   private ticker: Ticker;
   private shouldStop: boolean = false;
   private isInEnding;
@@ -15,24 +18,41 @@ class Reel extends Container {
     config: AppConfigInterface,
     ticker: Ticker,
     position: IPointData,
-    slots: number[]
+    slots: number[],
+    textures: any
   ) {
     super();
-    const { slotTileSize } = config;
+    this.slotTileSize = config.slotTileSize;
     this.spinSpeed = config.slotSpeed;
 
     const bg = new Graphics();
     bg.beginFill(0xffffff)
-      .drawRect(0, 0, slotTileSize, slotTileSize * 3)
+      .drawRect(0, 0, this.slotTileSize, this.slotTileSize * 3)
       .endFill();
     this.addChild(bg);
 
-    this.height = slotTileSize * 3;
+    this.height = this.slotTileSize * 3;
     this.position = position;
 
     for (let i = -1; i < 3; i++) {
-      const tile = new Tile(slotTileSize, slots[i + 1], Texture.WHITE);
-      tile.position = { x: 0, y: slotTileSize * i };
+      let tile: Tile;
+      switch (slots[i + 1]) {
+        case TileSlotType.A:
+          tile = new Tile(this.slotTileSize, textures["apple.png"]);
+          break;
+        case TileSlotType.B:
+          tile = new Tile(this.slotTileSize, textures["cherry.png"]);
+          break;
+        case TileSlotType.C:
+          tile = new Tile(this.slotTileSize, textures["seven.png"]);
+          break;
+        case TileSlotType.D:
+          tile = new Tile(this.slotTileSize, textures["watermelon.png"]);
+          break;
+        default:
+          tile = new Tile(this.slotTileSize, Texture.WHITE);
+      }
+      tile.position = { x: 0, y: this.slotTileSize * i };
       this.addChild(tile);
       this.tiles.push(tile);
     }
@@ -41,7 +61,7 @@ class Reel extends Container {
     this.ticker = ticker;
 
     this.endingTween = new Tween({ y: 0 })
-      .to({ y: slotTileSize }, 1000)
+      .to({ y: this.slotTileSize }, 1000)
       .easing(Easing.Elastic.Out)
       .onStart(this.handleTweenStart)
       .onUpdate(this.handleTweenUpdate)
@@ -50,7 +70,7 @@ class Reel extends Container {
 
   private handleTweenStart = () => {
     this.tiles.forEach((tile) => {
-      tile.position.y -= 100;
+      tile.position.y -= this.slotTileSize;
       tile.lastVerticalPosition = tile.position.y;
     });
   };
@@ -96,8 +116,8 @@ class Reel extends Container {
 
   private moveLastTileToTop = () => {
     this.tiles.every((item) => {
-      if (!(item.position.y >= 100 * 3)) return true;
-      item.position.y = -100;
+      if (!(item.position.y >= this.slotTileSize * 3)) return true;
+      item.position.y = -this.slotTileSize;
       this.formatTiles(item);
       return false;
     });

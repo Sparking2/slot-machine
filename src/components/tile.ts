@@ -11,10 +11,9 @@ class SlotTile extends Sprite {
     this._lastVerticalPosition = value;
   }
 
-  constructor(size: number, color: number, texture: Texture) {
+  constructor(size: number, texture: Texture) {
     super(texture);
 
-    this.tint = color;
     this.width = size;
     this.height = size;
 

@@ -1,5 +1,6 @@
 import { IPointData } from "pixi.js";
 import { Colors } from "./settings/colors";
+import TileSlotType = Colors.TileSlotType;
 
 export interface AppConfigInterface {
   // in ms
@@ -16,7 +17,8 @@ export interface AppConfigInterface {
   slotCount: number;
   slotPadding: number;
   slotSpeed: number;
-  slotTiles: number[][];
+  slotTexturePath: string;
+  slotTiles: TileSlotType[][];
 }
 
 export const appConfig: AppConfigInterface = {
@@ -24,6 +26,7 @@ export const appConfig: AppConfigInterface = {
   slotPadding: 10,
   slotTileSize: 100,
   slotSpeed: 35,
+  slotTexturePath: "spritesheets/task2.json",
   slotTiles: [
     [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4],
     [Colors.slot4, Colors.slot1, Colors.slot2, Colors.slot3],
@@ -37,5 +40,5 @@ export const appConfig: AppConfigInterface = {
   viewHeight: 720,
   frameCheckInterval: 100,
   maxFPS: 60,
-  gameTime: 3500, // ms
+  gameTime: 3692, // ms
 };
