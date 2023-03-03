@@ -1,4 +1,11 @@
-import { Container, Graphics, IPointData, Texture, Ticker } from "pixi.js";
+import {
+  BlurFilter,
+  Container,
+  Graphics,
+  IPointData,
+  Texture,
+  Ticker,
+} from "pixi.js";
 import { AppConfigInterface } from "../config";
 import Tile from "./tile";
 import { Easing, Tween } from "@tweenjs/tween.js";
@@ -13,6 +20,7 @@ class Reel extends Container {
   private shouldStop: boolean = false;
   private isInEnding;
   private endingTween: Tween<any>;
+  private filter: BlurFilter;
 
   constructor(
     config: AppConfigInterface,
@@ -66,6 +74,10 @@ class Reel extends Container {
       .onStart(this.handleTweenStart)
       .onUpdate(this.handleTweenUpdate)
       .onComplete(this.handleTweenCompleted);
+
+    this.filter = new BlurFilter();
+    this.filter.enabled = false;
+    this.filters = [this.filter];
   }
 
   private handleTweenStart = () => {
@@ -88,9 +100,15 @@ class Reel extends Container {
     this.isInEnding = false;
   };
 
-  public spin = () => this.ticker.add(this.animation);
+  public spin = () => {
+    this.ticker.add(this.animation);
+    this.filter.enabled = true;
+  };
 
-  public requestStop = () => (this.shouldStop = true);
+  public requestStop = () => {
+    this.filter.enabled = false;
+    this.shouldStop = true;
+  };
 
   private tweenStart = (timestamp: number) => {
     this.endingTween.start(timestamp);

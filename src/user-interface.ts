@@ -5,7 +5,6 @@ import FpsDisplay from "./components/fps-display";
 import PlayButton from "./components/play-button";
 import Reel from "./components/reel";
 import GameManager from "./game-manager";
-import { MotionBlurFilter } from "pixi-filters";
 
 class UserInterface {
   mainContainer: Container;
@@ -17,11 +16,6 @@ class UserInterface {
   private _reels: Reel[] = [];
   get reels(): Reel[] {
     return this._reels;
-  }
-
-  private readonly _filter: MotionBlurFilter;
-  get filter(): MotionBlurFilter {
-    return this._filter;
   }
 
   constructor(
@@ -75,10 +69,6 @@ class UserInterface {
     containerMask.position.set(640, 360);
     pixiApp.stage.addChild(containerMask);
     slotsContainer.mask = containerMask;
-
-    this._filter = new MotionBlurFilter([0, 0], 25);
-    this._filter.enabled = true;
-    containerMask.filters = [this._filter];
   }
 }
 
