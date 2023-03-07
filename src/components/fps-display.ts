@@ -6,7 +6,7 @@ import {
   TextStyle,
   Ticker,
 } from "pixi.js";
-import { AppConfigInterface } from "../config";
+import { IAppConfig } from "../config";
 
 class FpsDisplay extends Container {
   protected fontName = "fpsFont";
@@ -22,7 +22,7 @@ class FpsDisplay extends Container {
   private millisecondsPast: number = 0;
   protected content: BitmapText;
 
-  constructor(settings: AppConfigInterface, ticker: Ticker) {
+  constructor(settings: IAppConfig, ticker: Ticker) {
     super();
     this.originalPosition = settings.fpsLabelPosition;
 

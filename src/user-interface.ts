@@ -1,34 +1,34 @@
 import { pixiApp } from "./components/pixi-app";
 import { Assets, Container, Graphics, Ticker } from "pixi.js";
-import { AppConfigInterface } from "./config";
+import { IAppConfig } from "./config";
 import FpsDisplay from "./components/fps-display";
-import PlayButton from "./components/play-button";
 import Reel from "./components/reel";
 import GameManager from "./game-manager";
+import Button from "./components/Button/Button";
 
 class UserInterface {
   mainContainer: Container;
   fpsCounter: FpsDisplay;
-  private readonly _playButton: PlayButton;
-  get playButton(): PlayButton {
+  private readonly _playButton: Button;
+  get playButton(): Button {
     return this._playButton;
   }
-  private _reels: Reel[] = [];
-  get reels(): Reel[] {
-    return this._reels;
-  }
+  public reels: Reel[];
 
-  constructor(
-    config: AppConfigInterface,
-    ticker: Ticker,
-    gameManager: GameManager
-  ) {
+  constructor(config: IAppConfig, ticker: Ticker, gameManager: GameManager) {
+    this.reels = [];
+
     const mainContainer = new Container();
     const fps = new FpsDisplay(config, ticker);
     mainContainer.addChild(fps);
 
-    const playBtn = new PlayButton(config, gameManager);
+    const playButtonData = config.playButtonSettings;
+    playButtonData.callback = () => {
+      gameManager.startSpin();
+    };
+    const playBtn = new Button(playButtonData);
     mainContainer.addChild(playBtn);
+    this._playButton = playBtn;
 
     const slotsContainer = new Container();
 
@@ -39,7 +39,7 @@ class UserInterface {
         const tiles = config.slotTiles[i];
         const reel = new Reel(config, ticker, position, tiles, result);
         slotsContainer.addChild(reel);
-        this._reels.push(reel);
+        this.reels.push(reel);
       }
 
       const slotContainerHeight = slotsContainer.height - config.slotTileSize;
@@ -53,7 +53,6 @@ class UserInterface {
 
     this.fpsCounter = fps;
     this.mainContainer = mainContainer;
-    this._playButton = playBtn;
 
     pixiApp.stage.addChild(this.mainContainer);
 

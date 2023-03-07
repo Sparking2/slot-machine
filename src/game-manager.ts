@@ -1,7 +1,7 @@
 import Reel from "./components/reel";
-import { AppConfigInterface } from "./config";
-import PlayButton from "./components/play-button";
+import { IAppConfig } from "./config";
 import { NullType } from "./NullType";
+import Button from "./components/Button/Button";
 
 class GameManager {
   private _reels: Reel[] = [];
@@ -9,18 +9,18 @@ class GameManager {
     this._reels = value;
   }
 
-  private _playButton: NullType<PlayButton> = null;
-  set playButton(value: PlayButton) {
+  private _playButton: NullType<Button> = null;
+  set playButton(value: Button) {
     this._playButton = value;
   }
 
   private readonly _gameTime: number;
 
-  constructor(config: AppConfigInterface) {
+  constructor(config: IAppConfig) {
     this._gameTime = config.gameTime;
   }
 
-  public bindUI(reels: Reel[], playButton: PlayButton) {
+  public bindUI(reels: Reel[], playButton: Button) {
     this.playButton = playButton;
     this.reels = reels;
   }

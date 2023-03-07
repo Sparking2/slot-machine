@@ -1,8 +1,9 @@
 import { IPointData } from "pixi.js";
 import { Colors } from "./settings/colors";
 import TileSlotType = Colors.TileSlotType;
+import { IButtonData } from "./components/Button/IButtonData";
 
-export interface AppConfigInterface {
+export interface IAppConfig {
   // in ms
   frameCheckInterval: number;
   maxFPS: number;
@@ -11,7 +12,6 @@ export interface AppConfigInterface {
   // 0 - 1.0 for screen %, 1 - inf for pixel size
   viewHeight: number;
   fpsLabelPosition: IPointData;
-  playButtonPosition: IPointData;
   slotTileSize: number;
   gameTime: number;
   slotCount: number;
@@ -19,9 +19,19 @@ export interface AppConfigInterface {
   slotSpeed: number;
   slotTexturePath: string;
   slotTiles: TileSlotType[][];
+  playButtonSettings: IButtonData;
 }
 
-export const appConfig: AppConfigInterface = {
+export const appConfig: IAppConfig = {
+  playButtonSettings: {
+    text: "Play",
+    buttonWidth: 100,
+    buttonHeight: 50,
+    position: { x: 1000, y: 500 },
+    normalColor: Colors.btnActive,
+    hoverColor: Colors.btnHover,
+    disabledColor: Colors.btnDisabled,
+  },
   slotCount: 5,
   slotPadding: 10,
   slotTileSize: 100,
@@ -35,7 +45,6 @@ export const appConfig: AppConfigInterface = {
     [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4],
   ],
   fpsLabelPosition: { x: 100, y: 2 },
-  playButtonPosition: { x: 1000, y: 500 },
   viewWidth: 1280,
   viewHeight: 720,
   frameCheckInterval: 100,

@@ -6,7 +6,7 @@ import {
   Texture,
   Ticker,
 } from "pixi.js";
-import { AppConfigInterface } from "../config";
+import { IAppConfig } from "../config";
 import Tile from "./tile";
 import { Easing, Tween } from "@tweenjs/tween.js";
 import { Colors } from "../settings/colors";
@@ -23,7 +23,7 @@ class Reel extends Container {
   private filter: BlurFilter;
 
   constructor(
-    config: AppConfigInterface,
+    config: IAppConfig,
     ticker: Ticker,
     position: IPointData,
     slots: number[],

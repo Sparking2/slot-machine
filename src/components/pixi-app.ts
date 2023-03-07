@@ -1,11 +1,11 @@
 import "../style.css";
 
 import { Application } from "pixi.js";
-import { AppConfigInterface } from "../config";
+import { IAppConfig } from "../config";
 import { Colors } from "../settings/colors";
 export let pixiApp: Application;
 
-export function init(settings: AppConfigInterface) {
+export function init(settings: IAppConfig) {
   const app = document.querySelector<HTMLDivElement>("#app");
   if (!app) throw new Error("Can't find app div");
 
