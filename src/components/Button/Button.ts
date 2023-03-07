@@ -57,7 +57,8 @@ class Button extends Container implements IButtonData {
   }
 
   private handleClick(_: FederatedPointerEvent) {
-    if (this.callback) this.callback();
+    if (!this.callback) return;
+    this.callback();
     this.setDisabled();
   }
 

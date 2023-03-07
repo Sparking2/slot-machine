@@ -3,7 +3,6 @@ import { Assets, Container, Graphics, Ticker } from "pixi.js";
 import { IAppConfig } from "./settings/Config";
 import FpsLabel from "./components/FpsLabel";
 import Reel from "./components/Reel";
-import GameManager from "./game-manager";
 import Button from "./components/Button/Button";
 
 class UserInterface {
@@ -15,7 +14,11 @@ class UserInterface {
   }
   public reels: Reel[];
 
-  constructor(config: IAppConfig, ticker: Ticker, gameManager: GameManager) {
+  constructor(
+    config: IAppConfig,
+    ticker: Ticker,
+    playButtonCallback: Function
+  ) {
     this.reels = [];
 
     const mainContainer = new Container();
@@ -23,9 +26,7 @@ class UserInterface {
     mainContainer.addChild(fps);
 
     const playButtonData = config.playButtonSettings;
-    playButtonData.callback = () => {
-      gameManager.startSpin();
-    };
+    playButtonData.callback = playButtonCallback;
     const playBtn = new Button(playButtonData);
     mainContainer.addChild(playBtn);
     this._playButton = playBtn;

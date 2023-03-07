@@ -12,7 +12,7 @@ ticker.maxFPS = config.maxFPS;
 const gameManager = new GameManager(config);
 
 PixiApp.init(config);
-const ui = new UserInterface(config, ticker, gameManager);
-gameManager.bindUI(ui.reels, ui.playButton);
-
+const ui = new UserInterface(config, ticker, () => gameManager.startSpin());
+gameManager.reels = ui.reels;
+gameManager.playButton = ui.playButton;
 console.log("Hello there...");

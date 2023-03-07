@@ -4,12 +4,9 @@ import Button from "./components/Button/Button";
 import { Ticker } from "pixi.js";
 
 class GameManager {
-  private _reels: Reel[] = [];
-  set reels(value: Reel[]) {
-    this._reels = value;
-  }
+  public reels?: Reel[];
 
-  private playButton?: Button;
+  public playButton?: Button;
 
   private readonly _gameTime: number;
 
@@ -17,16 +14,11 @@ class GameManager {
     this._gameTime = config.gameTime;
   }
 
-  public bindUI(reels: Reel[], playButton: Button) {
-    this.playButton = playButton;
-    this.reels = reels;
-  }
-
   public startSpin() {
-    if (this._reels.length == 0) return;
+    if (!this.reels || this.reels.length == 0) return;
 
     const gameTimeSeconds = this._gameTime / 1000;
-    const reelTime = gameTimeSeconds / this._reels.length;
+    const reelTime = gameTimeSeconds / this.reels.length;
 
     const spinReelTimer = (reel: Reel, index: number) => {
       let spinTime = 0;
@@ -41,7 +33,7 @@ class GameManager {
       };
       Ticker.shared.add(spinTick);
     };
-    this._reels.forEach(spinReelTimer);
+    this.reels.forEach(spinReelTimer);
 
     let gameTimePast = 0;
     const gameTick = (deltaTime: number) => {
