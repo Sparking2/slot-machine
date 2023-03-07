@@ -1,6 +1,5 @@
 import Reel from "./components/Reel";
 import { IAppConfig } from "./settings/Config";
-import { NullType } from "./NullType";
 import Button from "./components/Button/Button";
 import { Ticker } from "pixi.js";
 
@@ -10,10 +9,7 @@ class GameManager {
     this._reels = value;
   }
 
-  private _playButton: NullType<Button> = null;
-  set playButton(value: Button) {
-    this._playButton = value;
-  }
+  private playButton?: Button;
 
   private readonly _gameTime: number;
 
@@ -59,8 +55,8 @@ class GameManager {
   }
 
   private enablePlayButton = () => {
-    if (!this._playButton) throw new Error("Button reference not set");
-    this._playButton.setEnabled();
+    if (!this.playButton) throw new Error("Button reference not set");
+    this.playButton.setEnabled();
   };
 }
 
