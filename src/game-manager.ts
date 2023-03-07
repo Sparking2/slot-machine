@@ -2,6 +2,7 @@ import Reel from "./components/Reel";
 import { IAppConfig } from "./settings/Config";
 import { NullType } from "./NullType";
 import Button from "./components/Button/Button";
+import { Ticker } from "pixi.js";
 
 class GameManager {
   private _reels: Reel[] = [];
@@ -27,15 +28,34 @@ class GameManager {
 
   public startSpin() {
     if (this._reels.length == 0) return;
-    const reelTime = this._gameTime / this._reels.length;
-    this._reels.forEach((reel, index) => {
-      reel.spin();
+
+    const gameTimeSeconds = this._gameTime / 1000;
+    const reelTime = gameTimeSeconds / this._reels.length;
+
+    const spinReelTimer = (reel: Reel, index: number) => {
+      let spinTime = 0;
       const delay = reelTime * (index + 1);
-      setTimeout(() => {
-        reel.requestStop();
-      }, delay);
-    });
-    setTimeout(this.enablePlayButton, this._gameTime);
+      reel.spin();
+      const spinTick = (deltaTime: number) => {
+        spinTime += (1 / 60) * deltaTime;
+        if (spinTime > delay) {
+          Ticker.shared.remove(spinTick);
+          reel.requestStop();
+        }
+      };
+      Ticker.shared.add(spinTick);
+    };
+    this._reels.forEach(spinReelTimer);
+
+    let gameTimePast = 0;
+    const gameTick = (deltaTime: number) => {
+      gameTimePast += (1 / 60) * deltaTime;
+      if (gameTimePast >= gameTimeSeconds) {
+        Ticker.shared.remove(gameTick);
+        this.enablePlayButton();
+      }
+    };
+    Ticker.shared.add(gameTick);
   }
 
   private enablePlayButton = () => {

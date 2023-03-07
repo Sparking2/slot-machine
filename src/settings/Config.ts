@@ -49,5 +49,5 @@ export const appConfig: IAppConfig = {
   viewHeight: 720,
   frameCheckInterval: 100,
   maxFPS: 60,
-  gameTime: 3692, // ms
+  gameTime: 3500, // ms
 };
