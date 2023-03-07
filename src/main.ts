@@ -1,6 +1,6 @@
 import "./style.css";
 import * as PixiApp from "./components/pixi-app";
-import { appConfig } from "./config";
+import { appConfig } from "./settings/Config";
 import { Ticker } from "pixi.js";
 import GameManager from "./game-manager";
 import UserInterface from "./user-interface";

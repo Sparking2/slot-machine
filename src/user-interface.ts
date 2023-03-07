@@ -1,14 +1,14 @@
 import { pixiApp } from "./components/pixi-app";
 import { Assets, Container, Graphics, Ticker } from "pixi.js";
-import { IAppConfig } from "./config";
-import FpsDisplay from "./components/fps-display";
-import Reel from "./components/reel";
+import { IAppConfig } from "./settings/Config";
+import FpsLabel from "./components/FpsLabel";
+import Reel from "./components/Reel";
 import GameManager from "./game-manager";
 import Button from "./components/Button/Button";
 
 class UserInterface {
   mainContainer: Container;
-  fpsCounter: FpsDisplay;
+  fpsCounter: FpsLabel;
   private readonly _playButton: Button;
   get playButton(): Button {
     return this._playButton;
@@ -19,7 +19,7 @@ class UserInterface {
     this.reels = [];
 
     const mainContainer = new Container();
-    const fps = new FpsDisplay(config, ticker);
+    const fps = new FpsLabel(config, ticker);
     mainContainer.addChild(fps);
 
     const playButtonData = config.playButtonSettings;

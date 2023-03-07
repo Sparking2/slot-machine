@@ -6,11 +6,10 @@ import {
   Texture,
   Ticker,
 } from "pixi.js";
-import { IAppConfig } from "../config";
-import Tile from "./tile";
+import { IAppConfig } from "../settings/Config";
+import Tile from "./Tile";
 import { Easing, Tween } from "@tweenjs/tween.js";
-import { Colors } from "../settings/colors";
-import TileSlotType = Colors.TileSlotType;
+import { TempTiles } from "../settings/tempTiles";
 
 class Reel extends Container {
   private tiles: Tile[] = [];
@@ -45,16 +44,16 @@ class Reel extends Container {
     for (let i = -1; i < 3; i++) {
       let tile: Tile;
       switch (slots[i + 1]) {
-        case TileSlotType.A:
+        case TempTiles.TileSlotType.A:
           tile = new Tile(this.slotTileSize, textures["apple.png"]);
           break;
-        case TileSlotType.B:
+        case TempTiles.TileSlotType.B:
           tile = new Tile(this.slotTileSize, textures["cherry.png"]);
           break;
-        case TileSlotType.C:
+        case TempTiles.TileSlotType.C:
           tile = new Tile(this.slotTileSize, textures["seven.png"]);
           break;
-        case TileSlotType.D:
+        case TempTiles.TileSlotType.D:
           tile = new Tile(this.slotTileSize, textures["watermelon.png"]);
           break;
         default:

@@ -1,7 +1,7 @@
 import { IPointData } from "pixi.js";
-import { Colors } from "./settings/colors";
-import TileSlotType = Colors.TileSlotType;
-import { IButtonData } from "./components/Button/IButtonData";
+import * as Colors from "../constants/Colors";
+import { IButtonData } from "../components/Button/IButtonData";
+import { TempTiles } from "./tempTiles";
 
 export interface IAppConfig {
   // in ms
@@ -18,7 +18,7 @@ export interface IAppConfig {
   slotPadding: number;
   slotSpeed: number;
   slotTexturePath: string;
-  slotTiles: TileSlotType[][];
+  slotTiles: TempTiles.TileSlotType[][];
   playButtonSettings: IButtonData;
 }
 
@@ -38,11 +38,11 @@ export const appConfig: IAppConfig = {
   slotSpeed: 35,
   slotTexturePath: "spritesheets/task2.json",
   slotTiles: [
-    [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4],
-    [Colors.slot4, Colors.slot1, Colors.slot2, Colors.slot3],
-    [Colors.slot3, Colors.slot4, Colors.slot1, Colors.slot2],
-    [Colors.slot2, Colors.slot3, Colors.slot4, Colors.slot1],
-    [Colors.slot1, Colors.slot2, Colors.slot3, Colors.slot4],
+    [TempTiles.slot1, TempTiles.slot2, TempTiles.slot3, TempTiles.slot4],
+    [TempTiles.slot4, TempTiles.slot1, TempTiles.slot2, TempTiles.slot3],
+    [TempTiles.slot3, TempTiles.slot4, TempTiles.slot1, TempTiles.slot2],
+    [TempTiles.slot2, TempTiles.slot3, TempTiles.slot4, TempTiles.slot1],
+    [TempTiles.slot1, TempTiles.slot2, TempTiles.slot3, TempTiles.slot4],
   ],
   fpsLabelPosition: { x: 100, y: 2 },
   viewWidth: 1280,

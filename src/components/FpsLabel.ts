@@ -6,9 +6,9 @@ import {
   TextStyle,
   Ticker,
 } from "pixi.js";
-import { IAppConfig } from "../config";
+import { IAppConfig } from "../settings/Config";
 
-class FpsDisplay extends Container {
+class FpsLabel extends Container {
   protected fontName = "fpsFont";
   protected textStyle: Partial<TextStyle> = {
     fill: "#333333",
@@ -51,4 +51,4 @@ class FpsDisplay extends Container {
   }
 }
 
-export default FpsDisplay;
+export default FpsLabel;

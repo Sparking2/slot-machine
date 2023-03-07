@@ -1,5 +1,5 @@
-import Reel from "./components/reel";
-import { IAppConfig } from "./config";
+import Reel from "./components/Reel";
+import { IAppConfig } from "./settings/Config";
 import { NullType } from "./NullType";
 import Button from "./components/Button/Button";
 

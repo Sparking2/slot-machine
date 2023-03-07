@@ -1,4 +1,4 @@
-export namespace Colors {
+export namespace TempTiles {
   export enum TileSlotType {
     A,
     B,
@@ -8,11 +8,6 @@ export namespace Colors {
 
   export const viewBackground = 0x777777;
   export const mainStageBackground = 0xffffff;
-
-  // play button colors
-  export const btnDisabled = 0xdddddd;
-  export const btnHover = 0x00ffff;
-  export const btnActive = 0x00ff00;
 
   // slot type
   export const slot1 = TileSlotType.A;
