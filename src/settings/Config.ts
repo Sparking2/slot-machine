@@ -2,11 +2,9 @@ import { IPointData } from "pixi.js";
 import * as Colors from "../constants/Colors";
 import { IButtonData } from "../components/Button/IButtonData";
 import { TempTiles } from "./tempTiles";
+import { IFpsConfig } from "../components/FpsLabel/IFpsConfig";
 
 export interface IAppConfig {
-  // in ms
-  frameCheckInterval: number;
-  maxFPS: number;
   // 0 - 1.0 for screen %, 1 - inf for pixel size
   viewWidth: number;
   // 0 - 1.0 for screen %, 1 - inf for pixel size
@@ -19,7 +17,9 @@ export interface IAppConfig {
   slotSpeed: number;
   slotTexturePath: string;
   slotTiles: TempTiles.TileSlotType[][];
+  //
   playButtonSettings: IButtonData;
+  fpsLabelSettings: IFpsConfig;
 }
 
 export const appConfig: IAppConfig = {
@@ -31,6 +31,10 @@ export const appConfig: IAppConfig = {
     normalColor: Colors.btnActive,
     hoverColor: Colors.btnHover,
     disabledColor: Colors.btnDisabled,
+  },
+  fpsLabelSettings: {
+    position: { x: 10, y: 5 },
+    fontSize: 15,
   },
   slotCount: 5,
   slotPadding: 10,
@@ -47,7 +51,5 @@ export const appConfig: IAppConfig = {
   fpsLabelPosition: { x: 100, y: 2 },
   viewWidth: 1280,
   viewHeight: 720,
-  frameCheckInterval: 100,
-  maxFPS: 60,
   gameTime: 3500, // ms
 };

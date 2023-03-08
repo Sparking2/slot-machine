@@ -1,35 +1,23 @@
 import { pixiApp } from "./components/pixi-app";
 import { Assets, Container, Graphics, Ticker } from "pixi.js";
 import { IAppConfig } from "./settings/Config";
-import FpsLabel from "./components/FpsLabel";
+import FpsLabel from "./components/FpsLabel/FpsLabel";
 import Reel from "./components/Reel";
 import Button from "./components/Button/Button";
+import { IFpsConfig } from "./components/FpsLabel/IFpsConfig";
+import { IButtonData } from "./components/Button/IButtonData";
 
 class UserInterface {
-  mainContainer: Container;
-  fpsCounter: FpsLabel;
-  private readonly _playButton: Button;
-  get playButton(): Button {
-    return this._playButton;
-  }
+  private readonly mainContainer?: Container;
+  public playButton?: Button;
+  private ticker: Ticker;
   public reels: Reel[];
 
-  constructor(
-    config: IAppConfig,
-    ticker: Ticker,
-    playButtonCallback: Function
-  ) {
+  constructor(config: IAppConfig, ticker: Ticker) {
     this.reels = [];
+    this.ticker = ticker;
 
     const mainContainer = new Container();
-    const fps = new FpsLabel(config, ticker);
-    mainContainer.addChild(fps);
-
-    const playButtonData = config.playButtonSettings;
-    playButtonData.callback = playButtonCallback;
-    const playBtn = new Button(playButtonData);
-    mainContainer.addChild(playBtn);
-    this._playButton = playBtn;
 
     const slotsContainer = new Container();
 
@@ -52,7 +40,6 @@ class UserInterface {
       mainContainer.addChild(slotsContainer);
     });
 
-    this.fpsCounter = fps;
     this.mainContainer = mainContainer;
 
     pixiApp.stage.addChild(this.mainContainer);
@@ -69,6 +56,19 @@ class UserInterface {
     containerMask.position.set(640, 360);
     pixiApp.stage.addChild(containerMask);
     slotsContainer.mask = containerMask;
+  }
+
+  public createFPSLabel(config: IFpsConfig) {
+    const fps = new FpsLabel(config, this.ticker);
+    this.mainContainer?.addChild(fps);
+  }
+
+  public createPlayButton(config: IButtonData, playButtonCallback: Function) {
+    const playButtonData = config;
+    playButtonData.callback = playButtonCallback;
+    const playBtn = new Button(playButtonData);
+    this.mainContainer?.addChild(playBtn);
+    this.playButton = playBtn;
   }
 }
 
