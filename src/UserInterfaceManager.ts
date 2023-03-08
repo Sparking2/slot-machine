@@ -6,6 +6,8 @@ import Reel from "./components/Reel";
 import Button from "./components/Button/Button";
 import { IFpsConfig } from "./components/FpsLabel/IFpsConfig";
 import { IButtonData } from "./components/Button/IButtonData";
+import { ETileSlotType } from "./constants/ETileSlotType";
+// import getRandomInt from "./utils/RandomNumberGenerator";
 
 class UserInterfaceManager {
   private readonly mainContainer?: Container;
@@ -55,6 +57,13 @@ class UserInterfaceManager {
       const x = (config.slotPadding + config.slotTileSize) * i;
       const position = { x: x, y: 0 };
       const tiles = config.slotTilesTemp[i];
+
+      // TODO: HEre i was...
+
+      // const tileList: ETileSlotType[] = [];
+      // tileList.push(ETileSlotType[getRandomInt(0,4)]);
+      console.log(<ETileSlotType>1);
+
       const reel = new Reel(
         config,
         this.ticker,
