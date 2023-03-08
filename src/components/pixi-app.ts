@@ -27,7 +27,7 @@ export function init(settings: IAppConfig) {
   resize();
 }
 
-function resize() {
+export function resize() {
   const w = window.innerWidth / 1280;
   const h = window.innerHeight / 720;
   pixiApp.stage.scale.set(w, h);

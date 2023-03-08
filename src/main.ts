@@ -3,7 +3,7 @@ import * as PixiApp from "./components/pixi-app";
 import { appConfig } from "./settings/Config";
 import { Ticker } from "pixi.js";
 import GameManager from "./game-manager";
-import UserInterface from "./user-interface";
+import UserInterfaceManager from "./UserInterfaceManager";
 
 const config = appConfig;
 const ticker = Ticker.shared;
@@ -11,11 +11,17 @@ const ticker = Ticker.shared;
 const gameManager = new GameManager(config);
 
 PixiApp.init(config);
-// Setup UI
-const ui = new UserInterface(config, ticker);
-ui.createFPSLabel(config.fpsLabelSettings);
-ui.createPlayButton(config.playButtonSettings, () => gameManager.startSpin());
+// should I move this setup inside UserInterfaceManager?
+const uiManager = new UserInterfaceManager(ticker);
+uiManager.createFPSLabel(config.fpsLabelSettings);
+uiManager.createPlayButton(config.playButtonSettings, () =>
+  gameManager.startSpin()
+);
+uiManager.loadTexture(config.slotTexturePath).then(() => {
+  uiManager.createReels(config);
+  uiManager.createReelMask(config);
+});
 
-gameManager.reels = ui.reels;
-gameManager.playButton = ui.playButton;
+gameManager.reels = uiManager.reels;
+gameManager.playButton = uiManager.playButton;
 console.log("Hello there...");

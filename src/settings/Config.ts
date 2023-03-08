@@ -3,6 +3,7 @@ import * as Colors from "../constants/Colors";
 import { IButtonData } from "../components/Button/IButtonData";
 import { TempTiles } from "./tempTiles";
 import { IFpsConfig } from "../components/FpsLabel/IFpsConfig";
+import { ETileSlotType } from "../constants/ETileSlotType";
 
 export interface IAppConfig {
   // 0 - 1.0 for screen %, 1 - inf for pixel size
@@ -16,10 +17,11 @@ export interface IAppConfig {
   slotPadding: number;
   slotSpeed: number;
   slotTexturePath: string;
-  slotTiles: TempTiles.TileSlotType[][];
+  slotTilesTemp: TempTiles.TileSlotType[][];
   //
   playButtonSettings: IButtonData;
   fpsLabelSettings: IFpsConfig;
+  slotTiles: Map<ETileSlotType, string>;
 }
 
 export const appConfig: IAppConfig = {
@@ -36,12 +38,18 @@ export const appConfig: IAppConfig = {
     position: { x: 10, y: 5 },
     fontSize: 15,
   },
+  slotTiles: new Map<ETileSlotType, string>([
+    [ETileSlotType.A, "apple.png"],
+    [ETileSlotType.B, "cherry.png"],
+    [ETileSlotType.C, "seven.png"],
+    [ETileSlotType.D, "watermelon.png"],
+  ]),
   slotCount: 5,
   slotPadding: 10,
   slotTileSize: 100,
   slotSpeed: 35,
   slotTexturePath: "spritesheets/task2.json",
-  slotTiles: [
+  slotTilesTemp: [
     [TempTiles.slot1, TempTiles.slot2, TempTiles.slot3, TempTiles.slot4],
     [TempTiles.slot4, TempTiles.slot1, TempTiles.slot2, TempTiles.slot3],
     [TempTiles.slot3, TempTiles.slot4, TempTiles.slot1, TempTiles.slot2],
