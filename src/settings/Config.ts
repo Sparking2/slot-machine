@@ -45,7 +45,7 @@ export const appConfig: IAppConfig = {
   slotCount: 5,
   slotPadding: 10,
   slotTileSize: 50,
-  slotSpeed: 35,
+  slotSpeed: 0.1,
   viewWidth: 1280,
   viewHeight: 720,
   gameTime: 3500, // ms
