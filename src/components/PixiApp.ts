@@ -2,7 +2,7 @@ import "../style.css";
 
 import { Application } from "pixi.js";
 import { IAppConfig } from "../settings/Config";
-import { TempTiles } from "../settings/tempTiles";
+import * as Colors from "../constants/Colors";
 export let pixiApp: Application;
 
 export function init(settings: IAppConfig) {
@@ -16,7 +16,7 @@ export function init(settings: IAppConfig) {
     view: canvas,
     resolution: window.devicePixelRatio || 1,
     autoDensity: true,
-    backgroundColor: TempTiles.viewBackground,
+    backgroundColor: Colors.viewBackground,
     width: settings.viewWidth,
     height: settings.viewHeight,
     resizeTo: app,

@@ -1,13 +1,11 @@
-import Reel from "./components/Reel";
-import { IAppConfig } from "./settings/Config";
-import Button from "./components/Button/Button";
+import Reel from "../components/Reel";
+import { IAppConfig } from "../settings/Config";
+import Button from "../components/Button/Button";
 import { Ticker } from "pixi.js";
 
 class GameManager {
   public reels?: Reel[];
-
   public playButton?: Button;
-
   private readonly _gameTime: number;
 
   constructor(config: IAppConfig) {

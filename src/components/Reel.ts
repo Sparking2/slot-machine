@@ -1,65 +1,43 @@
-import {
-  BlurFilter,
-  Container,
-  Graphics,
-  IPointData,
-  Texture,
-  Ticker,
-} from "pixi.js";
+import { BlurFilter, Container, Graphics, IPointData, Ticker } from "pixi.js";
 import { IAppConfig } from "../settings/Config";
 import Tile from "./Tile";
 import { Easing, Tween } from "@tweenjs/tween.js";
-import { TempTiles } from "../settings/tempTiles";
+import { ETileSlotType } from "../constants/ETileSlotType";
 
 class Reel extends Container {
-  private tiles: Tile[] = [];
+  private readonly tiles: Tile[];
   private readonly spinSpeed: number;
-  private slotTileSize: number;
+  private readonly slotTileSize: number;
+  private readonly filter: BlurFilter;
   private ticker: Ticker;
-  private shouldStop: boolean = false;
+  private shouldStop: boolean;
   private isInEnding;
   private endingTween: Tween<any>;
-  private filter: BlurFilter;
 
   constructor(
     config: IAppConfig,
     ticker: Ticker,
     position: IPointData,
-    slots: number[],
-    textures: any
+    textures: any,
+    reelTiles: ETileSlotType[]
   ) {
     super();
     this.slotTileSize = config.slotTileSize;
     this.spinSpeed = config.slotSpeed;
+    this.tiles = [];
 
     const bg = new Graphics();
+    const bgHeight = this.slotTileSize * (reelTiles.length - 2);
     bg.beginFill(0xffffff)
-      .drawRect(0, 0, this.slotTileSize, this.slotTileSize * 3)
+      .drawRect(0, 0, this.slotTileSize, bgHeight)
       .endFill();
     this.addChild(bg);
 
-    this.height = this.slotTileSize * 3;
-    this.position = position;
-
-    for (let i = -1; i < 3; i++) {
-      let tile: Tile;
-      switch (slots[i + 1]) {
-        case TempTiles.TileSlotType.A:
-          tile = new Tile(this.slotTileSize, textures["apple.png"]);
-          break;
-        case TempTiles.TileSlotType.B:
-          tile = new Tile(this.slotTileSize, textures["cherry.png"]);
-          break;
-        case TempTiles.TileSlotType.C:
-          tile = new Tile(this.slotTileSize, textures["seven.png"]);
-          break;
-        case TempTiles.TileSlotType.D:
-          tile = new Tile(this.slotTileSize, textures["watermelon.png"]);
-          break;
-        default:
-          tile = new Tile(this.slotTileSize, Texture.WHITE);
-      }
-      tile.position = { x: 0, y: this.slotTileSize * i };
+    for (let i = 0; i < reelTiles.length; i++) {
+      const textureName = config.slotTilesTextures.get(reelTiles[i]);
+      if (typeof textureName == "undefined") continue;
+      const tile: Tile = new Tile(this.slotTileSize, textures[textureName]);
+      tile.position = { x: 0, y: this.slotTileSize * i - this.slotTileSize };
       this.addChild(tile);
       this.tiles.push(tile);
     }
@@ -77,6 +55,10 @@ class Reel extends Container {
     this.filter = new BlurFilter();
     this.filter.enabled = false;
     this.filters = [this.filter];
+
+    this.shouldStop = false;
+
+    this.position = position;
   }
 
   private handleTweenStart = () => {
@@ -133,7 +115,7 @@ class Reel extends Container {
 
   private moveLastTileToTop = () => {
     this.tiles.every((item) => {
-      if (!(item.position.y >= this.slotTileSize * 3)) return true;
+      if (!(item.position.y >= this.slotTileSize * 4)) return true;
       item.position.y = -this.slotTileSize;
       this.formatTiles(item);
       return false;

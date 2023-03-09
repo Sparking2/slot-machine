@@ -1,7 +1,5 @@
-import { IPointData } from "pixi.js";
 import * as Colors from "../constants/Colors";
 import { IButtonData } from "../components/Button/IButtonData";
-import { TempTiles } from "./tempTiles";
 import { IFpsConfig } from "../components/FpsLabel/IFpsConfig";
 import { ETileSlotType } from "../constants/ETileSlotType";
 
@@ -10,18 +8,16 @@ export interface IAppConfig {
   viewWidth: number;
   // 0 - 1.0 for screen %, 1 - inf for pixel size
   viewHeight: number;
-  fpsLabelPosition: IPointData;
   slotTileSize: number;
   gameTime: number;
   slotCount: number;
   slotPadding: number;
   slotSpeed: number;
   slotTexturePath: string;
-  slotTilesTemp: TempTiles.TileSlotType[][];
-  //
   playButtonSettings: IButtonData;
   fpsLabelSettings: IFpsConfig;
-  slotTiles: Map<ETileSlotType, string>;
+  slotTilesTextures: Map<ETileSlotType, string>;
+  reelLength: number;
 }
 
 export const appConfig: IAppConfig = {
@@ -38,25 +34,18 @@ export const appConfig: IAppConfig = {
     position: { x: 10, y: 5 },
     fontSize: 15,
   },
-  slotTiles: new Map<ETileSlotType, string>([
+  slotTexturePath: "spritesheets/task2.json",
+  slotTilesTextures: new Map<ETileSlotType, string>([
     [ETileSlotType.A, "apple.png"],
     [ETileSlotType.B, "cherry.png"],
     [ETileSlotType.C, "seven.png"],
     [ETileSlotType.D, "watermelon.png"],
   ]),
+  reelLength: 3, // n + 2
   slotCount: 5,
   slotPadding: 10,
-  slotTileSize: 100,
+  slotTileSize: 50,
   slotSpeed: 35,
-  slotTexturePath: "spritesheets/task2.json",
-  slotTilesTemp: [
-    [TempTiles.slot1, TempTiles.slot2, TempTiles.slot3, TempTiles.slot4],
-    [TempTiles.slot4, TempTiles.slot1, TempTiles.slot2, TempTiles.slot3],
-    [TempTiles.slot3, TempTiles.slot4, TempTiles.slot1, TempTiles.slot2],
-    [TempTiles.slot2, TempTiles.slot3, TempTiles.slot4, TempTiles.slot1],
-    [TempTiles.slot1, TempTiles.slot2, TempTiles.slot3, TempTiles.slot4],
-  ],
-  fpsLabelPosition: { x: 100, y: 2 },
   viewWidth: 1280,
   viewHeight: 720,
   gameTime: 3500, // ms

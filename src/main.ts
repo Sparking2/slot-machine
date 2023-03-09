@@ -1,9 +1,9 @@
 import "./style.css";
-import * as PixiApp from "./components/pixi-app";
+import * as PixiApp from "./components/PixiApp";
 import { appConfig } from "./settings/Config";
 import { Ticker } from "pixi.js";
-import GameManager from "./game-manager";
-import UserInterfaceManager from "./UserInterfaceManager";
+import GameManager from "./managers/GameManager";
+import UserInterfaceManager from "./managers/UserInterfaceManager";
 
 const config = appConfig;
 const ticker = Ticker.shared;
