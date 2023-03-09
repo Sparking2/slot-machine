@@ -6,17 +6,15 @@ import Reel from "../components/Reel";
 import Button from "../components/Button/Button";
 import { IFpsConfig } from "../components/FpsLabel/IFpsConfig";
 import { IButtonData } from "../components/Button/IButtonData";
-import { ETileSlotType } from "../constants/ETileSlotType";
+import { ESymbolSlotType } from "../constants/ESymbolSlotType";
 import getRandomInt from "../utils/RandomNumberGenerator";
 
 class UserInterfaceManager {
-  private readonly mainContainer?: Container;
-  private readonly slotsContainer?: Container;
-  private readonly ticker: Ticker;
-
+  private mainContainer?: Container;
+  private slotsContainer?: Container;
+  private ticker: Ticker;
   public playButton?: Button;
   public reels: Reel[];
-
   private loadedTextures?: Object;
 
   constructor(ticker: Ticker) {
@@ -54,13 +52,13 @@ class UserInterfaceManager {
     const slotsContainer = this.slotsContainer;
 
     for (let i = 0; i < config.slotCount; i++) {
-      const x = (config.slotPadding + config.slotTileSize) * i;
+      const x = (config.slotPadding + config.slotSymbolSize) * i;
       const position = { x: x, y: 0 };
 
-      const tileList: ETileSlotType[] = [];
+      const symbolList: ESymbolSlotType[] = [];
       for (let i = 0; i < config.reelLength + 2; i++) {
         const randomNumber = getRandomInt(0, 3);
-        tileList.push(randomNumber as ETileSlotType);
+        symbolList.push(randomNumber as ESymbolSlotType);
       }
 
       const reel = new Reel(
@@ -68,7 +66,7 @@ class UserInterfaceManager {
         this.ticker,
         position,
         this.loadedTextures,
-        tileList
+        symbolList
       );
       slotsContainer.addChild(reel);
       this.reels.push(reel);
@@ -76,7 +74,7 @@ class UserInterfaceManager {
 
     slotsContainer.pivot = {
       x: slotsContainer.width / 2,
-      y: (config.slotTileSize / 2) * config.reelLength,
+      y: (config.slotSymbolSize / 2) * config.reelLength,
     };
     slotsContainer.position.set(config.viewWidth / 2, config.viewHeight / 2);
   }
@@ -84,8 +82,8 @@ class UserInterfaceManager {
   public createReelMask(config: IAppConfig) {
     const containerMask = new Graphics();
     const maskWidth =
-      (config.slotPadding + config.slotTileSize) * config.slotCount;
-    const maskHeight = config.slotTileSize * config.reelLength;
+      (config.slotPadding + config.slotSymbolSize) * config.slotCount;
+    const maskHeight = config.slotSymbolSize * config.reelLength;
     containerMask
       .beginFill(0x660000)
       .drawRect(0, 0, maskWidth, maskHeight)
@@ -95,8 +93,8 @@ class UserInterfaceManager {
       y: containerMask.height / 2,
     };
     containerMask.position.set(config.viewWidth / 2, config.viewHeight / 2);
-    // this.mainContainer?.addChild(containerMask);
-    // if (this.slotsContainer) this.slotsContainer.mask = containerMask;
+    this.mainContainer?.addChild(containerMask);
+    if (this.slotsContainer) this.slotsContainer.mask = containerMask;
   }
 }
 

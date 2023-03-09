@@ -1,6 +1,6 @@
 import { Sprite, Texture } from "pixi.js";
 
-class SlotTile extends Sprite {
+class Symbol extends Sprite {
   private _lastVerticalPosition: number;
 
   get lastVerticalPosition(): number {
@@ -21,4 +21,4 @@ class SlotTile extends Sprite {
   }
 }
 
-export default SlotTile;
+export default Symbol;

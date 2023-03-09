@@ -1,14 +1,14 @@
 import * as Colors from "../constants/Colors";
 import { IButtonData } from "../components/Button/IButtonData";
 import { IFpsConfig } from "../components/FpsLabel/IFpsConfig";
-import { ETileSlotType } from "../constants/ETileSlotType";
+import { ESymbolSlotType } from "../constants/ESymbolSlotType";
 
 export interface IAppConfig {
   // 0 - 1.0 for screen %, 1 - inf for pixel size
   viewWidth: number;
   // 0 - 1.0 for screen %, 1 - inf for pixel size
   viewHeight: number;
-  slotTileSize: number;
+  slotSymbolSize: number;
   gameTime: number;
   slotCount: number;
   slotPadding: number;
@@ -16,7 +16,7 @@ export interface IAppConfig {
   slotTexturePath: string;
   playButtonSettings: IButtonData;
   fpsLabelSettings: IFpsConfig;
-  slotTilesTextures: Map<ETileSlotType, string>;
+  slotSymbolTextures: Map<ESymbolSlotType, string>;
   reelLength: number;
 }
 
@@ -35,17 +35,17 @@ export const appConfig: IAppConfig = {
     fontSize: 15,
   },
   slotTexturePath: "spritesheets/task2.json",
-  slotTilesTextures: new Map<ETileSlotType, string>([
-    [ETileSlotType.A, "apple.png"],
-    [ETileSlotType.B, "cherry.png"],
-    [ETileSlotType.C, "seven.png"],
-    [ETileSlotType.D, "watermelon.png"],
+  slotSymbolTextures: new Map<ESymbolSlotType, string>([
+    [ESymbolSlotType.A, "apple.png"],
+    [ESymbolSlotType.B, "cherry.png"],
+    [ESymbolSlotType.C, "seven.png"],
+    [ESymbolSlotType.D, "watermelon.png"],
   ]),
   reelLength: 3, // n + 2
   slotCount: 5,
   slotPadding: 10,
-  slotTileSize: 50,
-  slotSpeed: 0.1,
+  slotSymbolSize: 100,
+  slotSpeed: 30,
   viewWidth: 1280,
   viewHeight: 720,
   gameTime: 3500, // ms

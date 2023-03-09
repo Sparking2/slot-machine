@@ -6,7 +6,7 @@ import { Ticker } from "pixi.js";
 class GameManager {
   public reels?: Reel[];
   public playButton?: Button;
-  private readonly _gameTime: number;
+  private _gameTime: number;
 
   constructor(config: IAppConfig) {
     this._gameTime = config.gameTime;

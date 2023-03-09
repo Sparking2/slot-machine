@@ -1,14 +1,14 @@
 import { BlurFilter, Container, Graphics, IPointData, Ticker } from "pixi.js";
 import { IAppConfig } from "../settings/Config";
-import Tile from "./Tile";
+import Symbol from "./Symbol";
 import { Easing, Tween } from "@tweenjs/tween.js";
-import { ETileSlotType } from "../constants/ETileSlotType";
+import { ESymbolSlotType } from "../constants/ESymbolSlotType";
 
 class Reel extends Container {
-  private readonly tiles: Tile[];
-  private readonly spinSpeed: number;
-  private readonly slotTileSize: number;
-  private readonly filter: BlurFilter;
+  private symbols: Symbol[];
+  private spinSpeed: number;
+  private symbolSize: number;
+  private filter: BlurFilter;
   private ticker: Ticker;
   private shouldStop: boolean;
   private isInEnding;
@@ -19,34 +19,34 @@ class Reel extends Container {
     ticker: Ticker,
     position: IPointData,
     textures: any,
-    reelTiles: ETileSlotType[]
+    reelSymbols: ESymbolSlotType[]
   ) {
     super();
-    this.slotTileSize = config.slotTileSize;
+    this.symbolSize = config.slotSymbolSize;
     this.spinSpeed = config.slotSpeed;
-    this.tiles = [];
+    this.symbols = [];
 
     const bg = new Graphics();
-    const bgHeight = this.slotTileSize * (reelTiles.length - 2);
+    const bgHeight = this.symbolSize * (reelSymbols.length - 2);
     bg.beginFill(0xffffff)
-      .drawRect(0, 0, this.slotTileSize, bgHeight)
+      .drawRect(0, 0, this.symbolSize, bgHeight)
       .endFill();
     this.addChild(bg);
 
-    for (let i = 0; i < reelTiles.length; i++) {
-      const textureName = config.slotTilesTextures.get(reelTiles[i]);
+    for (let i = 0; i < reelSymbols.length; i++) {
+      const textureName = config.slotSymbolTextures.get(reelSymbols[i]);
       if (typeof textureName == "undefined") continue;
-      const tile: Tile = new Tile(this.slotTileSize, textures[textureName]);
-      tile.position = { x: 0, y: this.slotTileSize * i - this.slotTileSize };
-      this.addChild(tile);
-      this.tiles.push(tile);
+      const symbol: Symbol = new Symbol(this.symbolSize, textures[textureName]);
+      symbol.position = { x: 0, y: this.symbolSize * i - this.symbolSize };
+      this.addChild(symbol);
+      this.symbols.push(symbol);
     }
 
     this.isInEnding = false;
     this.ticker = ticker;
 
     this.endingTween = new Tween({ y: 0 })
-      .to({ y: this.slotTileSize }, 1000)
+      .to({ y: this.symbolSize }, 1000)
       .easing(Easing.Elastic.Out)
       .onStart(this.handleTweenStart)
       .onUpdate(this.handleTweenUpdate)
@@ -62,21 +62,21 @@ class Reel extends Container {
   }
 
   private handleTweenStart = () => {
-    this.tiles.forEach((tile) => {
-      tile.position.y -= this.slotTileSize;
-      tile.lastVerticalPosition = tile.position.y;
+    this.symbols.forEach((symbol) => {
+      symbol.position.y -= this.symbolSize;
+      symbol.lastVerticalPosition = symbol.position.y;
     });
   };
 
   private handleTweenUpdate = (tweenValue: { y: number }) => {
-    this.tiles.forEach((tile) => {
-      tile.position.y = tile.lastVerticalPosition + tweenValue.y;
+    this.symbols.forEach((symbol) => {
+      symbol.position.y = symbol.lastVerticalPosition + tweenValue.y;
     });
   };
 
   private handleTweenCompleted = () => {
-    this.tiles.forEach((tile) => {
-      tile.lastVerticalPosition = 0;
+    this.symbols.forEach((symbol) => {
+      symbol.lastVerticalPosition = 0;
     });
     this.isInEnding = false;
   };
@@ -103,39 +103,38 @@ class Reel extends Container {
   };
 
   private animation = (deltaTime: number) => {
-    this.moveTiles(deltaTime);
-    this.moveLastTileToTop();
+    this.moveSymbols(deltaTime);
+    this.moveLastSymbolToTop();
   };
 
-  private moveTiles = (delta: number) => {
-    this.tiles.forEach((item) => {
+  private moveSymbols = (delta: number) => {
+    this.symbols.forEach((item) => {
       item.y += delta * this.spinSpeed;
     });
   };
 
-  private moveLastTileToTop = () => {
-    this.tiles.every((item) => {
-      if (!(item.position.y >= this.slotTileSize * 4)) return true;
-      item.position.y = -this.slotTileSize;
-      this.formatTiles(item);
+  private moveLastSymbolToTop = () => {
+    const maxDistance = (this.symbols.length - 1) * this.symbolSize;
+    this.symbols.every((item) => {
+      if (!(item.position.y >= maxDistance)) return true;
+      item.position.y = -this.symbolSize;
+      this.formatSymbols(item);
       return false;
     });
   };
 
-  private formatTiles = (topTile: Tile) => {
-    const topTileIndex = this.tiles.indexOf(topTile);
-    const length = this.tiles.length;
-    const finalIndex = topTileIndex + length;
+  private formatSymbols = (topSymbol: Symbol) => {
+    const topSymbolIndex = this.symbols.indexOf(topSymbol);
+    const length = this.symbols.length;
+    const finalIndex = topSymbolIndex + length;
 
-    let visibleTileIndex = 2;
-    for (let i = topTileIndex; i < finalIndex; i++) {
-      let currentItem = this.tiles[((i % length) + length) % length];
-      if (currentItem == topTile) continue;
+    let visibleSymbolsIndex = 0;
+    for (let i = topSymbolIndex; i < finalIndex; i++){
+      const currentItem = this.symbols[((i % length) + length) % length];
+      if(currentItem == topSymbol) continue;
 
-      if (visibleTileIndex == 0) currentItem.position.y = 200;
-      else if (visibleTileIndex == 1) currentItem.position.y = 100;
-      else if (visibleTileIndex == 2) currentItem.position.y = 0;
-      visibleTileIndex--;
+      currentItem.position.y = visibleSymbolsIndex * this.symbolSize;
+      visibleSymbolsIndex++;
     }
 
     if (this.shouldStop) {

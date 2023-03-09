@@ -10,14 +10,14 @@ import {
 import { IButtonData } from "./IButtonData";
 
 class Button extends Container implements IButtonData {
-  readonly text: string;
-  readonly buttonWidth: number;
-  readonly buttonHeight: number;
-  readonly normalColor: number;
-  readonly hoverColor: number;
-  readonly disabledColor: number;
-  readonly callback?: Function;
-  readonly background: Sprite;
+  text: string;
+  buttonWidth: number;
+  buttonHeight: number;
+  normalColor: number;
+  hoverColor: number;
+  disabledColor: number;
+  callback?: Function;
+  background: Sprite;
 
   constructor(data: IButtonData) {
     super();
