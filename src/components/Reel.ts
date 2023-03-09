@@ -1,7 +1,7 @@
 import { BlurFilter, Container, Graphics, IPointData, Ticker } from "pixi.js";
 import { IAppConfig } from "../settings/Config";
 import Symbol from "./Symbol";
-import { Easing, Tween } from "@tweenjs/tween.js";
+import {Easing, Tween} from "@tweenjs/tween.js";
 import { ESymbolSlotType } from "../constants/ESymbolSlotType";
 
 class Reel extends Container {
@@ -79,6 +79,7 @@ class Reel extends Container {
       symbol.lastVerticalPosition = 0;
     });
     this.isInEnding = false;
+    this.ticker.remove(this.tweenStep);
   };
 
   public spin = () => {
@@ -94,13 +95,14 @@ class Reel extends Container {
   private tweenStart = (timestamp: number) => {
     this.endingTween.start(timestamp);
     this.isInEnding = true;
+    this.ticker.add(this.tweenStep)
   };
 
-  private tweenStep = (timestamp: number) => {
-    if (!this.isInEnding) return;
-    requestAnimationFrame((time) => this.tweenStep(time));
-    this.endingTween.update(timestamp);
-  };
+  private tweenStep = () => {
+    if(!this.isInEnding) return;
+    const time = performance.now();
+    this.endingTween.update(time);
+  }
 
   private animation = (deltaTime: number) => {
     this.moveSymbols(deltaTime);
@@ -143,7 +145,6 @@ class Reel extends Container {
 
       const now = performance.now();
       this.tweenStart(now);
-      this.tweenStep(now);
     }
   };
 }
